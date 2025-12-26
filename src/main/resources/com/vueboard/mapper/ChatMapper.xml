@@ -3,7 +3,7 @@
 <mapper namespace="com.vueboard.mapper.ChatMapper">
 	<insert id="insertChat">
 		INSERT INTO TB_CHAT(CHAT_ID, MEMBER_ID, NAME, MESSAGE, SEND_TIME)
-		VALUES(SEQ_CHAT.NEXTVAL, #{memberId}, #{name}, #{message},
+		VALUES(VUEBOARD.SEQ_CHAT.NEXTVAL, #{memberId}, #{name}, #{message},
 		SYSTIMESTAMP)
 
 	</insert>
