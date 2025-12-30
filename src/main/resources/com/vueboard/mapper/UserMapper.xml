@@ -5,6 +5,7 @@
     <!-- 로그인 쿼리 -->
     <select id="login" resultType="com.vueboard.entity.User">
         SELECT 
+        	PN,
             MEMBER_ID AS memberId,
             PASSWORD,
             NAME,
