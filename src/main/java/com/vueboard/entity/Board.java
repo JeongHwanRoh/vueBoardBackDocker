@@ -12,6 +12,7 @@ public class Board {
    private String title;
    private String content;
    private Long pn;
+   private String writer;
    private LocalDateTime  regdate;
    private int viewcnt;
    private String category;

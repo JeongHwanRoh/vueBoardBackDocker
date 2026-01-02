@@ -6,18 +6,19 @@
 	<select id="selectBoardsByPage"
 		resultType="com.vueboard.entity.Board">
 		SELECT * FROM (
-			SELECT ROWNUM AS rnum, A.* FROM (
-			SELECT
-				BOARD_ID AS boardId,
-				TITLE,
-				CONTENT,
-				WRITER_ID AS writerId,
-				CATEGORY,
-				REGDATE,
-				VIEWCNT
-				FROM TB_BOARD
-				ORDER BY BOARD_ID
-			) A
+		SELECT ROWNUM AS rnum, A.* FROM (
+		SELECT
+		BOARD_ID AS boardId,
+		TITLE,
+		WRITER,
+		CONTENT,
+		PN,
+		CATEGORY,
+		REGDATE,
+		VIEWCNT
+		FROM TB_BOARD
+		ORDER BY BOARD_ID
+		) A
 		)
 		WHERE rnum BETWEEN #{offset}+1 AND #{offset}+#{size}
 	</select>
@@ -36,12 +37,12 @@
 		SELECT
 		BOARD_ID AS boardId,
 		TITLE,
+		WRITER,
 		CONTENT,
-		WRITER_ID AS
-		writerId,
+		PN,
+		CATEGORY,
 		REGDATE,
-		VIEWCNT,
-		CATEGORY
+		VIEWCNT
 		FROM TB_BOARD
 		WHERE
 		BOARD_ID=#{boardId}
@@ -50,7 +51,7 @@
 	</select>
 
 	<!-- 게시글 등록 -->
-	<insert id="insertBoard"
+<!-- 	<insert id="insertBoard"
 		parameterType="com.vueboard.entity.Board">
 
 		INSERT INTO TB_BOARD
@@ -67,7 +68,7 @@
 		)
 
 	</insert>
-
+ -->
 	<!--게시글 수정 -->
 	<update id="updateBoard"
 		parameterType="com.vueboard.entity.Board">
