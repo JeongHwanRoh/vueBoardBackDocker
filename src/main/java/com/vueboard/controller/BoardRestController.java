@@ -54,11 +54,11 @@ public class BoardRestController {
 	}
 
 	// 게시글 등록
-//	@PostMapping("/create")
-//	public String createBoard(@RequestBody Board board) {
-//		int result = boardService.insertBoard(board);
-//		return result > 0 ? "success" : "fail";
-//	}
+	@PostMapping("/create")
+	public String createBoard(@RequestBody Board board) {
+		int result = boardService.insertBoard(board);
+		return result > 0 ? "success" : "fail";
+	}
 	
 	// 게시글 수정
 	@PutMapping("/update/{boardId}")

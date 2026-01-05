@@ -41,10 +41,10 @@ public class BoardService {
 	}
 
 	// 게시글 등록
-//	public int insertBoard(Board board) {
-//
-//		return boardMapper.insertBoard(board);
-//	}
+	public int insertBoard(Board board) {
+
+		return boardMapper.insertBoard(board);
+	}
 
 	// 게시글 삭제
 	public int deleteBoard(long boardId) {

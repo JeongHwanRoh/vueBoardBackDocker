@@ -51,24 +51,23 @@
 	</select>
 
 	<!-- 게시글 등록 -->
-<!-- 	<insert id="insertBoard"
+	<insert id="insertBoard"
 		parameterType="com.vueboard.entity.Board">
 
 		INSERT INTO TB_BOARD
-		(BOARD_ID, TITLE, CONTENT,
-		WRITER_ID, REGDATE, VIEWCNT, CATEGORY)
+		(TITLE, CONTENT,
+		WRITER,PN, REGDATE, VIEWCNT)
 		VALUES (
-		VUEBOARD.SEQ_BOARD.NEXTVAL,
 		#{title},
 		#{content},
-		#{writerId},
+		#{writer},
+		#{pn},
 		SYSDATE,
-		0,
-		#{category}
+		0
 		)
 
 	</insert>
- -->
+
 	<!--게시글 수정 -->
 	<update id="updateBoard"
 		parameterType="com.vueboard.entity.Board">
