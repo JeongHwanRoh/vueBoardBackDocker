@@ -26,6 +26,7 @@ public class UserRestController {
         User user = userService.login(memberId, password);
         Map<String, Object> result = new HashMap<>();
 
+        
         if (user != null) {
             result.put("success", true);
             result.put("user", user);
