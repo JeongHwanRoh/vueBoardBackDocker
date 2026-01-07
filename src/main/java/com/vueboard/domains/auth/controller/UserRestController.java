@@ -23,7 +23,7 @@ public class UserRestController {
     public Map<String, Object> login(@RequestBody Map<String, String> req, HttpSession session) {
         String memberId = req.get("userId");
         String password = req.get("password");
-
+        System.out.println(memberId);
         User user = userService.login(memberId, password);
         Map<String, Object> result = new HashMap<>();
 
