@@ -1,7 +1,7 @@
-package com.vueboard.controller;
+package com.vueboard.domains.auth.controller;
 
-import com.vueboard.entity.User;
-import com.vueboard.service.UserService;
+import com.vueboard.domains.auth.entity.User;
+import com.vueboard.domains.auth.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

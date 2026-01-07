@@ -1,4 +1,4 @@
-package com.vueboard.entity;
+package com.vueboard.domains.auth.entity;
 
 import java.sql.Date;
 

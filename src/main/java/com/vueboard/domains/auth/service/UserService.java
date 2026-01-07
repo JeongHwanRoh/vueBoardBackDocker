@@ -1,9 +1,7 @@
-package com.vueboard.service;
-
+package com.vueboard.domains.auth.service;
 import org.springframework.stereotype.Service;
-
-import com.vueboard.entity.User;
-import com.vueboard.mapper.UserMapper;
+import com.vueboard.domains.auth.entity.User;
+import com.vueboard.domains.auth.mapper.UserMapper;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.vueboard.controller;
+package com.vueboard.domains.chat.controller;
 
 import java.time.LocalDateTime;
 
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.vueboard.entity.ChatMessage;
-import com.vueboard.service.ChatService;
+import com.vueboard.domains.chat.entity.ChatMessage;
+import com.vueboard.domains.chat.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
 

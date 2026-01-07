@@ -1,4 +1,4 @@
-package com.vueboard.entity;
+package com.vueboard.domains.board.entity;
 
 import java.sql.Date;
 import java.time.LocalDateTime;

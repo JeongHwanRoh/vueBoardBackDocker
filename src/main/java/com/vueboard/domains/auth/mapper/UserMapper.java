@@ -1,9 +1,9 @@
-package com.vueboard.mapper;
+package com.vueboard.domains.auth.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.vueboard.entity.User;
+import com.vueboard.domains.auth.entity.User;
 
 @Mapper
 public interface UserMapper {

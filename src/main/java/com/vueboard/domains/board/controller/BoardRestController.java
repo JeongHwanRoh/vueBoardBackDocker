@@ -1,8 +1,8 @@
-package com.vueboard.controller;
+package com.vueboard.domains.board.controller;
+import com.vueboard.domains.board.entity.Board;
+import com.vueboard.domains.board.mapper.BoardMapper;
+import com.vueboard.domains.board.service.BoardService;
 
-import com.vueboard.entity.Board;
-import com.vueboard.mapper.BoardMapper;
-import com.vueboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;

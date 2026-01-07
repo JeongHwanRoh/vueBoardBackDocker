@@ -1,13 +1,13 @@
-package com.vueboard.service;
+package com.vueboard.domains.board.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.vueboard.entity.Board;
-import com.vueboard.entity.User;
-import com.vueboard.mapper.BoardMapper;
-import com.vueboard.mapper.UserMapper;
+import com.vueboard.domains.auth.entity.User;
+import com.vueboard.domains.auth.mapper.UserMapper;
+import com.vueboard.domains.board.entity.Board;
+import com.vueboard.domains.board.mapper.BoardMapper;
 
 import lombok.RequiredArgsConstructor;
 

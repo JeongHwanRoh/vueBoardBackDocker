@@ -1,11 +1,11 @@
-package com.vueboard.mapper;
+package com.vueboard.domains.board.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.vueboard.entity.Board;
+import com.vueboard.domains.board.entity.Board;
 
 @Mapper
 public interface BoardMapper {
