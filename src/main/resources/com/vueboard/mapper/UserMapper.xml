@@ -13,7 +13,6 @@
             REGDATE
         FROM TB_MEMBER
         WHERE MEMBER_ID = #{memberId}
-          AND PASSWORD = #{password}
     </select>
 
 </mapper>
