@@ -1,8 +1,9 @@
 package com.vueboard.domains.auth.controller;
 
 import com.vueboard.domains.auth.entity.User;
-import com.vueboard.domains.auth.service.UserService;
+import com.vueboard.domains.auth.service.AuthService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,13 @@ import java.util.Map;
 //@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // Vue 포트 허용(Nuxt vue용)
 public class UserRestController {
 
-	private final UserService userService;
+	private final AuthService userService;
 
 	@PostMapping("/login")
-    public Map<String, Object> login(@RequestBody Map<String, String> req, HttpSession session) {
+    public Map<String, Object> login(@RequestBody Map<String, String> req, HttpSession session,  HttpServletResponse response) {
         String memberId = req.get("userId");
         String password = req.get("password");
-        User user = userService.login(memberId, password);
+        User user = userService.login(memberId, password, response);
         Map<String, Object> result = new HashMap<>();
 
         

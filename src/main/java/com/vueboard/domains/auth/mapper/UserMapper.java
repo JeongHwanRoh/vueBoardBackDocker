@@ -11,6 +11,6 @@ public interface UserMapper {
 	
 	// 로그인
 	// 아이디와 비밀번호로 회원 조회
-    User login(@Param("memberId") String memberId);
+    User getUserInfoById(@Param("memberId") String memberId);
 
 }

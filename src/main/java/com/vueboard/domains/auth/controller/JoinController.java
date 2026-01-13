@@ -2,7 +2,7 @@ package com.vueboard.domains.auth.controller;
 
 import com.vueboard.domains.auth.entity.User;
 import com.vueboard.domains.auth.service.JoinService;
-import com.vueboard.domains.auth.service.UserService;
+import com.vueboard.domains.auth.service.AuthService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

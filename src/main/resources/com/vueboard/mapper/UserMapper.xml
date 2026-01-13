@@ -3,7 +3,7 @@
 <mapper namespace="com.vueboard.domains.auth.mapper.UserMapper">
 
     <!-- 로그인 쿼리 -->
-    <select id="login" resultType="com.vueboard.domains.auth.entity.User">
+    <select id="getUserInfoById" resultType="com.vueboard.domains.auth.entity.User">
         SELECT 
         	PN,
             MEMBER_ID AS memberId,
