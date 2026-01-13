@@ -1,6 +1,8 @@
 package com.vueboard.domains.auth.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.vueboard.domains.auth.dto.AuthResponseDTO;
 import com.vueboard.domains.auth.entity.User;
 import com.vueboard.domains.auth.mapper.AuthMapper;
 import com.vueboard.global.utils.CookieUtil;
@@ -20,8 +22,8 @@ public class AuthService {
 	private final CookieUtil cookieUtil;
 
 	// 로그인
-	public User login(String memberId, String password, HttpServletResponse response) {
-		User user = authMapper.getUserInfoById(memberId);
+	public AuthResponseDTO login(String memberId, String password, HttpServletResponse response) {
+		AuthResponseDTO user = authMapper.getUserInfoById(memberId);
 		
 		if (user == null) {
 			return null;

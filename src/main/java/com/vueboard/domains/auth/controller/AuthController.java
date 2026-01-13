@@ -1,5 +1,6 @@
 package com.vueboard.domains.auth.controller;
 
+import com.vueboard.domains.auth.dto.AuthResponseDTO;
 import com.vueboard.domains.auth.entity.User;
 import com.vueboard.domains.auth.service.AuthService;
 import com.vueboard.global.utils.CookieUtil;
@@ -20,14 +21,14 @@ import java.util.Map;
 //@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // Vue 포트 허용(Nuxt vue용)
 public class AuthController {
 
-	private final AuthService userService;
+	private final AuthService authService;
 	private final CookieUtil cookieUtil;
 
 	@PostMapping("/login")
     public Map<String, Object> login(@RequestBody Map<String, String> req,  HttpServletResponse response) {
         String memberId = req.get("userId");
         String password = req.get("password");
-        User user = userService.login(memberId, password, response);
+        AuthResponseDTO user = authService.login(memberId, password, response);
         Map<String, Object> result = new HashMap<>();
 
         
