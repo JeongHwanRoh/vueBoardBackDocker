@@ -2,7 +2,9 @@ package com.vueboard.domains.auth.controller;
 
 import com.vueboard.domains.auth.entity.User;
 import com.vueboard.domains.auth.service.AuthService;
+import com.vueboard.global.utils.CookieUtil;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +18,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 //@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true") // Vue 포트 허용(일반vue용)
 //@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // Vue 포트 허용(Nuxt vue용)
-public class UserRestController {
+public class AuthController {
 
 	private final AuthService userService;
+	private final CookieUtil cookieUtil;
 
 	@PostMapping("/login")
-    public Map<String, Object> login(@RequestBody Map<String, String> req, HttpSession session,  HttpServletResponse response) {
+    public Map<String, Object> login(@RequestBody Map<String, String> req,  HttpServletResponse response) {
         String memberId = req.get("userId");
         String password = req.get("password");
         User user = userService.login(memberId, password, response);
@@ -31,7 +34,7 @@ public class UserRestController {
         if (user != null) {
             result.put("success", true);
             result.put("user", user);
-            session.setAttribute("loginUser",user);
+//            session.setAttribute("loginUser",user);
         } else {
             result.put("success", false);
         }
@@ -39,30 +42,30 @@ public class UserRestController {
     }
 
 	/**
-	 * 세션 확인 (Vue에서 현재 로그인 사용자 정보 확인용)
+	 * 세션 확인 (Vue에서 현재 로그인 사용자 정보 확인용) => jwt access Token 적용 후 주석처리함
 	 */
-	@GetMapping("/session")
-	public Map<String, Object> getSessionUser(HttpSession session) {
-		Map<String, Object> result = new HashMap<>();
-		User user = (User) session.getAttribute("loginUser");
-
-		if (user != null) {
-			result.put("isLogin", true);
-			result.put("user", user);
-		} else {
-			result.put("isLogin", false);
-		}
-
-		return result;
-	}
+//	@GetMapping("/session")
+//	public Map<String, Object> getSessionUser(HttpSession session) {
+//		Map<String, Object> result = new HashMap<>();
+//		User user = (User) session.getAttribute("loginUser");
+//
+//		if (user != null) {
+//			result.put("isLogin", true);
+//			result.put("user", user);
+//		} else {
+//			result.put("isLogin", false);
+//		}
+//
+//		return result;
+//	}
 
 	/**
 	 * 로그아웃
 	 */
 	@PostMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		System.out.println("🚪 로그아웃 완료");
+	public String logout(HttpServletResponse response) {
+	    Cookie deleteAccessToken= cookieUtil.deleteTokenCookie("accessToken");
+	    response.addCookie(deleteAccessToken);
 		return "logout success";
 	}
 }

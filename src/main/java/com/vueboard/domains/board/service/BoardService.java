@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.vueboard.domains.auth.entity.User;
-import com.vueboard.domains.auth.mapper.UserMapper;
+import com.vueboard.domains.auth.mapper.AuthMapper;
 import com.vueboard.domains.board.entity.Board;
 import com.vueboard.domains.board.mapper.BoardMapper;
 
