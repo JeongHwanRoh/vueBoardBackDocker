@@ -86,11 +86,11 @@
 			<version>2.3.3</version>
 		</dependency>
 		<!--spring boot security 추가-->
-		<!--		<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 			<version>3.0.2</version>
-		</dependency>-->
+		</dependency>
 		<!--spring boot security crypto 추가 -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>

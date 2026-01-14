@@ -7,7 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.vueboard.domains.auth.dto.AuthResponseDTO;
+import com.vueboard.domains.auth.dto.UserResponseDTO;
 import com.vueboard.domains.auth.entity.User;
 
 import io.jsonwebtoken.Claims;
@@ -39,7 +39,7 @@ public class JwtUtil {
 	}
 
 	// 액세스 토큰 생성
-	public String generateAccessToken(AuthResponseDTO user) { // 사용자 정보를 받아 jwt 생성
+	public String generateAccessToken(UserResponseDTO user) { // 사용자 정보를 받아 jwt 생성
 		return Jwts.builder() // jwt 빌더 객체를 생성
 				.setSubject(String.valueOf(user.getPn())) // 토큰의 주체 설정(사용자 pk)
 				.claim("email", user.getEmail()).claim("name", user.getName())
@@ -50,7 +50,7 @@ public class JwtUtil {
 
 	}
 
-	// 액세스토큰 검증
+	// 액세스토큰 검증(처음 생성시)
 	public boolean validateAccessToken(String token) {
 		try {
 			Jwts.parserBuilder() // jwt 파서 생성(파싱)

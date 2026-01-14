@@ -1,37 +1,38 @@
-/*
- * package com.vueboard.config;
- * 
- * import java.util.List;
- * 
- * import org.springframework.context.annotation.Bean; import
- * org.springframework.context.annotation.Configuration; import
- * org.springframework.security.config.annotation.web.builders.HttpSecurity;
- * import org.springframework.security.web.SecurityFilterChain; import
- * org.springframework.web.cors.CorsConfiguration; import
- * org.springframework.web.cors.CorsConfigurationSource; import
- * org.springframework.web.cors.UrlBasedCorsConfigurationSource;
- * 
- * @Configuration public class SecurityConfig {
- * 
- * @Bean public SecurityFilterChain filterChain(HttpSecurity http) throws
- * Exception { http .cors(cors ->
- * cors.configurationSource(corsConfigurationSource())) .csrf(csrf ->
- * csrf.disable()) .authorizeHttpRequests(auth -> auth .anyRequest().permitAll()
- * );
- * 
- * return http.build(); }
- * 
- * @Bean public CorsConfigurationSource corsConfigurationSource() {
- * CorsConfiguration config = new CorsConfiguration();
- * 
- * config.setAllowedOriginPatterns(List.of( "http://localhost:3000",
- * "http://localhost:*" )); config.setAllowedMethods(List.of( "GET", "POST",
- * "PUT", "DELETE", "OPTIONS" )); config.setAllowedHeaders(List.of("*"));
- * config.setAllowCredentials(true);
- * 
- * UrlBasedCorsConfigurationSource source = new
- * UrlBasedCorsConfigurationSource(); source.registerCorsConfiguration("/**",
- * config);
- * 
- * return source; } }
- */
+package com.vueboard.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.vueboard.global.security.JwtAuthFilter;
+
+import lombok.RequiredArgsConstructor;
+
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class SecurityConfig {
+
+	private final JwtAuthFilter jwtAuthFilter;
+
+	@Bean // SecurityFilterChain의 보안 필터 체인을 정의
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+		http.cors(Customizer.withDefaults()) // 시큐리티에 WebConfig에서 설정한 CORS 설정 추가
+				.csrf(csrf -> csrf.disable())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.logout(logout->logout.disable()) // Security 기본 LogoutFilter 비활성화 (/logout 컨토롤려 요청과 충돌 때문)
+				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+						.requestMatchers("/login", "/logout", "/join/memberJoin").permitAll().anyRequest()
+						.authenticated())
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
+}
