@@ -7,7 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.vueboard.domains.auth.dto.AuthResponseDTO;
+import com.vueboard.domains.auth.dto.UserResponseDTO;
 import com.vueboard.domains.auth.entity.User;
 
 import io.jsonwebtoken.Claims;
@@ -25,7 +25,7 @@ public class JwtUtil {
 	public static final long EXPIRATION_TIME = 1000 * 60 * 15; // 유효기간 설정 15분 유효
 	public static final long REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30; // 유효기간 설정 30일 유효 리프레시 토큰용 (자동로그인 전용) 
 	public static final long GENERAL_REFRESH_EXPIRATION_TIME = 1000 * 60 * 30; // 유효기간 설정 30분 유효 리프레시 토큰용 (일반로그인 전용) 
-	public static final String JWT_SECKEY = "Lwz8gB1p9XzJ4mTYGmU7C2qK0D9tN3zQhF1kW5sP7yE2R8vC0lM6xA4nH9uT5rX"; // jwt 키
+	public static final String JWT_SECKEY = "[시크릿키 부분]"; // jwt 키
 
 	// 생성자에서 secret_key를 주입받아 초기화
 	// 선언
@@ -39,7 +39,7 @@ public class JwtUtil {
 	}
 
 	// 액세스 토큰 생성
-	public String generateAccessToken(AuthResponseDTO user) { // 사용자 정보를 받아 jwt 생성
+	public String generateAccessToken(UserResponseDTO user) { // 사용자 정보를 받아 jwt 생성
 		return Jwts.builder() // jwt 빌더 객체를 생성
 				.setSubject(String.valueOf(user.getPn())) // 토큰의 주체 설정(사용자 pk)
 				.claim("email", user.getEmail()).claim("name", user.getName())
@@ -50,7 +50,7 @@ public class JwtUtil {
 
 	}
 
-	// 액세스토큰 검증
+	// 액세스토큰 검증(처음 생성시)
 	public boolean validateAccessToken(String token) {
 		try {
 			Jwts.parserBuilder() // jwt 파서 생성(파싱)
