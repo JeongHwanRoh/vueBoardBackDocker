@@ -25,7 +25,7 @@ public class JwtUtil {
 	public static final long EXPIRATION_TIME = 1000 * 60 * 15; // 유효기간 설정 15분 유효
 	public static final long REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30; // 유효기간 설정 30일 유효 리프레시 토큰용 (자동로그인 전용) 
 	public static final long GENERAL_REFRESH_EXPIRATION_TIME = 1000 * 60 * 30; // 유효기간 설정 30분 유효 리프레시 토큰용 (일반로그인 전용) 
-	public static final String JWT_SECKEY = "[SECRETKEY]"; // jwt 키
+	public static final String JWT_SECKEY = "[시크릿키 부분]"; // jwt 키
 
 	// 생성자에서 secret_key를 주입받아 초기화
 	// 선언
