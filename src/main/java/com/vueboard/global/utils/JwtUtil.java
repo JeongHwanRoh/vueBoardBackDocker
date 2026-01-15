@@ -16,35 +16,54 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 //jwt 생성 및 검증 유틸리티
 @Component // 빈 등록
 public class JwtUtil {
 
 	// jwt 만료시간 설정
-	public static final long EXPIRATION_TIME = 1000 * 60 * 15; // 유효기간 설정 15분 유효
-	public static final long REFRESH_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30; // 유효기간 설정 30일 유효 리프레시 토큰용 (자동로그인 전용) 
-	public static final long GENERAL_REFRESH_EXPIRATION_TIME = 1000 * 60 * 30; // 유효기간 설정 30분 유효 리프레시 토큰용 (일반로그인 전용) 
-	public static final String JWT_SECKEY = "[시크릿키 부분]"; // jwt 키
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${jwt.access-token-expiration}")
+    private long accessTokenExpiration;
+
+    @Value("${jwt.refresh-token-expiration}")
+    private long refreshTokenExpiration;
+
+    @Value("${jwt.general-refresh-token-expiration}")
+    private long generalRefreshTokenExpiration;
 
 	// 생성자에서 secret_key를 주입받아 초기화
 	// 선언
-	private String secret_key; // 관리자 비밀 키. 이걸 암호화 해서 사용. 256비트 키
-	private final SecretKey key; // JWT 서명 및 검증에 사용될 HMAC SHA 키 (256비트)
+	private SecretKey key; // 관리자 비밀 키. 이걸 암호화 해서 사용. 256비트 키
+	
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
 
-	public JwtUtil() {
-		// HMAC SHA 서명 키로 변환. 이 키로 토큰을 검증. HMAC SHA 알고리즘 사용. 키는 최소 256비트(32바이트) 이상.
-		this.secret_key = JWT_SECKEY; // 설정 파일에서 주입된 비밀 키 저장
-		this.key = Keys.hmacShaKeyFor(secret_key.getBytes());
-	}
+    // ===== getter 제공 =====
+    public long getAccessTokenExpiration() {
+        return accessTokenExpiration;
+    }
 
+    public long getRefreshTokenExpiration() {
+        return refreshTokenExpiration;
+    }
+
+    public long getGeneralRefreshTokenExpiration() {
+        return generalRefreshTokenExpiration;
+    }
+    
 	// 액세스 토큰 생성
 	public String generateAccessToken(UserResponseDTO user) { // 사용자 정보를 받아 jwt 생성
 		return Jwts.builder() // jwt 빌더 객체를 생성
 				.setSubject(String.valueOf(user.getPn())) // 토큰의 주체 설정(사용자 pk)
 				.claim("email", user.getEmail()).claim("name", user.getName())
 				.setIssuedAt(new Date()) // 발급시간 설정
-				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // 만료시간 설정, 현재시간에 유효기간 추가.
+				.setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration)) // 만료시간 설정, 현재시간에 유효기간 추가.
 				.signWith(key, SignatureAlgorithm.HS256) // 서명 생성
 				.compact(); // 최종적으로 jwt 문자열을 생성하여 반환
 
@@ -72,7 +91,7 @@ public class JwtUtil {
 	// 리프레시 토큰 생성
 	public String generateRefreshToken(String uuid) {
 		return Jwts.builder().setSubject(uuid).setIssuedAt(new Date()) // 발급시간 설정
-				.setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
+				.setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
 				.signWith(key, SignatureAlgorithm.HS256) // 서명 생성
 				.compact(); // jwt 생성
 	}
