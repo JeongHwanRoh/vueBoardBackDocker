@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.vueboard.domains.auth.entity.User;
 import com.vueboard.domains.auth.mapper.AuthMapper;
+import com.vueboard.domains.board.dto.BoardResponseDTO;
 import com.vueboard.domains.board.entity.Board;
 import com.vueboard.domains.board.mapper.BoardMapper;
 
@@ -19,14 +20,14 @@ public class BoardService {
 
 	// 페이징 처리된 게시물 조회(10개씩)
 	public List<Board> getBoardList(int offset, int size) {
-		
-		return boardMapper.selectBoardsByPage(offset,size);
-		
+
+		return boardMapper.selectBoardsByPage(offset, size);
+
 	}
-	
+
 	// 전체 게시물 수 구하기
 	public int getTotalCount() {
-		
+
 		return boardMapper.selectTotalCount();
 	}
 //	public List<Board> getAllBoards() {
@@ -44,6 +45,28 @@ public class BoardService {
 	public int insertBoard(Board board) {
 
 		return boardMapper.insertBoard(board);
+	}
+
+	// 게시글 수정
+	public BoardResponseDTO updateBoard(Board board, long pn) {
+		// 1.기존 글 가져오기
+		Board existing = boardMapper.getBoardById(board.getBoardId());
+		// 2. 본인만 수정 가능하게 작성자 검증(pn을 기준으로)
+		if (!existing.getPn().equals(pn)) {
+			throw new SecurityException("본인이 작성한 공지만 수정 가능합니다.");
+
+		}
+		// 3. 수정 후 Board 엔터티에 반영
+		int updated = boardMapper.updateBoard(board);
+		System.out.println("수정결과: "+updated);
+		if (updated == 0) {
+			throw new RuntimeException("게시글 수정에 실패했습니다.");
+		}
+		// 4. 수정된 데이터 다시 조회 (정합성 보장)
+		Board updatedBoard = boardMapper.getBoardById(board.getBoardId());
+		// 5. 엔터티에서 변경된 데이터를 ResponseDTO에도 반영
+		return new BoardResponseDTO(updatedBoard);
+
 	}
 
 	// 게시글 삭제

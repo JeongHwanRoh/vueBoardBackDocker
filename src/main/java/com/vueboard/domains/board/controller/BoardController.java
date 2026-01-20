@@ -1,8 +1,13 @@
 package com.vueboard.domains.board.controller;
+
+import com.vueboard.domains.board.dto.BoardResponseDTO;
 import com.vueboard.domains.board.entity.Board;
 import com.vueboard.domains.board.mapper.BoardMapper;
 import com.vueboard.domains.board.service.BoardService;
+import com.vueboard.global.utils.CookieUtil;
+import com.vueboard.global.utils.JwtUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -23,6 +28,8 @@ public class BoardController {
 
 	private final BoardService boardService;
 	private final BoardMapper boardMapper;
+	private final CookieUtil cookieutil;
+	private final JwtUtil jwtutil;
 
 	// 전체 게시글 목록
 //	@GetMapping("/list")
@@ -31,20 +38,19 @@ public class BoardController {
 //	}
 	// 페이징 처리(10개씩)
 	@GetMapping("/list")
-	public Map<String, Object> getBoards(
-	        @RequestParam(defaultValue = "1") int page,
-	        @RequestParam(defaultValue = "10") int size) {
+	public Map<String, Object> getBoards(@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int size) {
 
-	    int offset = (page - 1) * size; // 각 페이지 시작점
+		int offset = (page - 1) * size; // 각 페이지 시작점
 
-	    List<Board> boards = boardService.getBoardList(offset, size); // 해당 페이지의 게시물 목록
-	    int totalCount = boardService.getTotalCount(); // 전체 게시물 수
+		List<Board> boards = boardService.getBoardList(offset, size); // 해당 페이지의 게시물 목록
+		int totalCount = boardService.getTotalCount(); // 전체 게시물 수
 
-	    Map<String, Object> result = new HashMap<>();
-	    result.put("boards", boards); 
-	    result.put("totalCount", totalCount);
+		Map<String, Object> result = new HashMap<>();
+		result.put("boards", boards);
+		result.put("totalCount", totalCount);
 
-	    return result;
+		return result;
 	}
 
 	// 특정 게시글 조회
@@ -59,25 +65,33 @@ public class BoardController {
 		int result = boardService.insertBoard(board);
 		return result > 0 ? "success" : "fail";
 	}
-	
+
 	// 게시글 수정
 	@PutMapping("/update/{boardId}")
-	public ResponseEntity<String> updateBoard(
-	        @PathVariable Long boardId,
-	        @RequestBody Board board) {
-	    board.setBoardId(boardId);
-	    int result = boardMapper.updateBoard(board);
-	    return result > 0
-	        ? ResponseEntity.ok("update success")
-	        : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("update failed");
+	public ResponseEntity<BoardResponseDTO> updateBoard(@PathVariable Long boardId, @RequestBody Board board,
+			HttpServletRequest request) {
+		// 1. 쿠키에서 액세스 토큰 추출
+		String accessToken = cookieutil.resolveAccessTokenFromCookie(request);
+		System.out.println("accessToken값 :" + accessToken);
+
+		// 2. jwt에서 pn값 뽑아내기
+		long pn = Integer.parseInt(jwtutil.extractPn(accessToken));
+		System.out.println("pn값 :" + pn);
+		
+        // 3. PathVariable로 받은 boardId를 엔터티에 주입
+		board.setBoardId(boardId);
+		
+		// 4. 서비스 호출
+		BoardResponseDTO dto= boardService.updateBoard(board,pn);
+
+		return ResponseEntity.ok(dto);
 	}
-	
+
 	// 게시글 삭제
 	@DeleteMapping("/delete/{boardId}")
 	public String deleteBoard(@PathVariable Long boardId) {
 		int result = boardService.deleteBoard(boardId);
 		return result > 0 ? "success" : "fail";
 	}
-	
 
 }
