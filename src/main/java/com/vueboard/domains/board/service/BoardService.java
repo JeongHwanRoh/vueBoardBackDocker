@@ -24,6 +24,13 @@ public class BoardService {
 		return boardMapper.selectBoardsByPage(offset, size);
 
 	}
+	
+	// 게시글 번호 기준 최신 5개 게시물 조회 
+	public List<Board> getRecentFiveBoardList() {
+
+		return boardMapper.selectRecentFiveBoards();
+
+	}
 
 	// 전체 게시물 수 구하기
 	public int getTotalCount() {

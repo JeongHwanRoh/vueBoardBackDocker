@@ -52,6 +52,16 @@ public class BoardController {
 
 		return result;
 	}
+	
+	// 게시글 번호 기준 최신 5개 게시물 조회 
+	@GetMapping("/listRecentFive")
+	public Map<String, Object> getRecentFiveBoards(){
+		List<Board> boards = boardService.getRecentFiveBoardList(); // 게시글번호 기준 최근 5개 불러오기
+		Map<String, Object> result = new HashMap<>();
+		result.put("boards", boards);
+		return result;
+		
+	}
 
 	// 특정 게시글 조회
 	@GetMapping("/{boardId}")

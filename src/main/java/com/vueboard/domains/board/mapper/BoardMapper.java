@@ -11,6 +11,7 @@ import com.vueboard.domains.board.entity.Board;
 public interface BoardMapper {
 //    List<Board> getAllBoards();
 	List<Board> selectBoardsByPage(@Param("offset") int offset, @Param("size") int size);  //페이징 처리된 게시물 조회(10개씩)
+	List<Board> selectRecentFiveBoards(); // 게시글 번호 기준 최신 5개 게시물 조회 
     int selectTotalCount();  // 전체 게시물 개수
 	Board getBoardById(Long boardId); // 특정 게시글 조회
    int insertBoard(Board board); // 게시글 등록

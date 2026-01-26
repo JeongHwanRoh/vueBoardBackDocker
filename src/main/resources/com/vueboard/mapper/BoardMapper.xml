@@ -4,66 +4,86 @@
 
 <mapper namespace="com.vueboard.domains.board.mapper.BoardMapper">
 
-    <select id="selectBoardsByPage"
-            resultType="com.vueboard.domains.board.entity.Board">
-        SELECT * FROM (
-            SELECT ROWNUM AS rnum, A.* FROM (
-                SELECT
-                    BOARD_ID AS boardId,
-                    TITLE,
-                    WRITER,
-                    CONTENT,
-                    PN,
-                    CATEGORY,
-                    REGDATE,
-                    VIEWCNT
-                FROM TB_BOARD
-                ORDER BY BOARD_ID
-            ) A
-        )
-        WHERE rnum BETWEEN #{offset}+1 AND #{offset}+#{size}
-    </select>
+	<select id="selectBoardsByPage"
+		resultType="com.vueboard.domains.board.entity.Board">
+		SELECT * FROM (
+		SELECT ROWNUM AS rnum, A.* FROM (
+		SELECT
+		BOARD_ID AS boardId,
+		TITLE,
+		WRITER,
+		CONTENT,
+		PN,
+		CATEGORY,
+		REGDATE,
+		VIEWCNT
+		FROM TB_BOARD
+		ORDER BY BOARD_ID DESC
+		) A
+		)
+		WHERE rnum BETWEEN #{offset}+1 AND #{offset}+#{size}
 
-    <select id="selectTotalCount" resultType="int">
-        SELECT COUNT(*) FROM TB_BOARD
-    </select>
+	</select>
 
-    <select id="getBoardById"
-            parameterType="long"
-            resultType="com.vueboard.domains.board.entity.Board">
-        SELECT
-            BOARD_ID AS boardId,
-            TITLE,
-            WRITER,
-            CONTENT,
-            PN,
-            CATEGORY,
-            REGDATE,
-            VIEWCNT
-        FROM TB_BOARD
-        WHERE BOARD_ID = #{boardId}
-    </select>
+	<select id="selectRecentFiveBoards" resultType="com.vueboard.domains.board.entity.Board">
+		SELECT * FROM (
+		SELECT ROWNUM AS rnum, A.* FROM (
+		SELECT
+		BOARD_ID AS boardId,
+		TITLE,
+		WRITER,
+		CONTENT,
+		PN,
+		CATEGORY,
+		REGDATE,
+		VIEWCNT
+		FROM TB_BOARD
+		ORDER BY BOARD_ID DESC
+		) A
+		)
+		WHERE rnum BETWEEN 1 AND 5
 
-    <insert id="insertBoard"
-            parameterType="com.vueboard.domains.board.entity.Board">
-        INSERT INTO TB_BOARD
-        (TITLE, CONTENT, WRITER, PN, REGDATE, VIEWCNT)
-        VALUES
-        (#{title}, #{content}, #{writer}, #{pn}, SYSDATE, 0)
-    </insert>
+	</select>
 
-    <update id="updateBoard"
-            parameterType="com.vueboard.domains.board.entity.Board">
-        UPDATE TB_BOARD
-        SET TITLE = #{title},
-            CONTENT = #{content},
-            REGDATE = SYSDATE
-        WHERE BOARD_ID = #{boardId}
-    </update>
+	<select id="selectTotalCount" resultType="int">
+		SELECT COUNT(*) FROM TB_BOARD
+	</select>
 
-    <delete id="deleteBoard" parameterType="long">
-        DELETE FROM TB_BOARD
-        WHERE BOARD_ID = #{boardId}
-    </delete>
+	<select id="getBoardById" parameterType="long"
+		resultType="com.vueboard.domains.board.entity.Board">
+		SELECT
+		BOARD_ID AS boardId,
+		TITLE,
+		WRITER,
+		CONTENT,
+		PN,
+		CATEGORY,
+		REGDATE,
+		VIEWCNT
+		FROM TB_BOARD
+		WHERE BOARD_ID = #{boardId}
+	</select>
+
+	<insert id="insertBoard"
+		parameterType="com.vueboard.domains.board.entity.Board">
+		INSERT INTO TB_BOARD
+		(TITLE, CONTENT, WRITER, PN, REGDATE, VIEWCNT)
+		VALUES
+		(#{title}, #{content}, #{writer}, #{pn}, SYSDATE, 0)
+	</insert>
+
+	<update id="updateBoard"
+		parameterType="com.vueboard.domains.board.entity.Board">
+		UPDATE TB_BOARD
+		SET TITLE = #{title},
+		CONTENT = #{content},
+		REGDATE = SYSDATE
+		WHERE BOARD_ID = #{boardId}
+	</update>
+
+	<delete id="deleteBoard" parameterType="long">
+		DELETE FROM TB_BOARD
+		WHERE BOARD_ID = #{boardId}
+	</delete>
 
 </mapper>
