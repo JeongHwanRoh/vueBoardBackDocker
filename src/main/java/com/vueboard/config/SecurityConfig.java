@@ -29,7 +29,7 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.logout(logout->logout.disable()) // Security 기본 LogoutFilter 비활성화 (/logout 컨토롤려 요청과 충돌 때문)
 				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-						.requestMatchers("/login", "/logout", "/join/memberJoin").permitAll().anyRequest()
+						.requestMatchers("/login", "/logout", "/join/memberJoin", "/board/image/**").permitAll().anyRequest()
 						.authenticated())
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

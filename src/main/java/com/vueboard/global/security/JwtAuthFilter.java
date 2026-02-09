@@ -29,21 +29,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	private final JwtUtil jwtUtil;
 	private final CookieUtil cookieUtil;
 	private final AuthService authservice;
-	
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		
+		// 이미지 업로드 시 인증 필터 패스하도록 설정
+		String uri = request.getRequestURI();
+		if (uri.startsWith("/board/image/")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
 		String token = CookieUtil.resolveAccessTokenFromCookie(request); // 쿠키에서 accessToken 검증
 
 		if (token != null && jwtUtil.validateAccessToken(token)) {
 
-			long pn =Long.parseLong(jwtUtil.extractPn(token)); // accessToken에서 pn값 꺼내기
-			
+			long pn = Long.parseLong(jwtUtil.extractPn(token)); // accessToken에서 pn값 꺼내기
+
 			UserResponseDTO user = authservice.findByPn(pn); // 사용자 식별
 
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, // principal
-					null, List.of() 
-			);
+					null, List.of());
 
 			SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContext에 인증 정보 저장
 		}

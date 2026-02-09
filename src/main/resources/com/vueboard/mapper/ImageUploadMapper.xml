@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.vueboard.domains.image.mapper.ImageUploadMapper">
+
+	<!-- 업로드 시 imageId 자동생성 -->
+	<select id="nextTempImageId" resultType="long">
+		SELECT SEQ_TEMP_IMAGE.NEXTVAL FROM DUAL
+	</select>
+
+	<!-- 업로드 이미지 저장 -->
+	<insert id="insert"
+		parameterType="com.vueboard.domains.image.entity.UploadedTempImage">
+		INSERT INTO TB_TEMP_IMAGE (
+		TEMP_IMAGE_ID,
+		ORIGINAL_NAME,
+		STORED_NAME,
+		IMAGE_URL,
+		FILE_SIZE,
+		CREATED_AT
+		) VALUES (
+		#{tempImgId},
+		#{originalName},
+		#{storedName},
+		#{imageUrl},
+		#{fileSize},
+		SYSTIMESTAMP
+		)
+	</insert>
+
+</mapper>

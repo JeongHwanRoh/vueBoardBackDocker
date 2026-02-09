@@ -2,6 +2,7 @@ package com.vueboard.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 //작동 원리
@@ -27,5 +28,11 @@ public class WebConfig implements WebMvcConfigurer {
             .allowedHeaders("*")
             .allowCredentials(true);
     }
+    
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/uploads/**") // 브라우저에서 접근할 URL 경로
+				.addResourceLocations("file:/app/uploads/"); // 실제 로컬 디스크 경로
+	}
 }
 
