@@ -30,11 +30,11 @@ public class SecurityConfig {
 				.logout(logout -> logout.disable()) // Security 기본 LogoutFilter 비활성화 (/logout 컨토롤려 요청과 충돌 때문)
 				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+						// 이미지 업로드/저장
+						.requestMatchers("/board/image/**").permitAll()
+
 						// 인증/회원 관련
 						.requestMatchers("/login", "/logout", "/join/memberJoin").permitAll()
-
-						// 이미지 업로드/저장
-						.requestMatchers("/board/image/upload", "/board/image/save/**").permitAll()
 
 						// 게시글/기타 API
 						.requestMatchers("/board/**").authenticated()

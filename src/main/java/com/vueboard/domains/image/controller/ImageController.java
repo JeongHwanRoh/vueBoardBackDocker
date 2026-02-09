@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,8 +35,8 @@ public class ImageController {
         return Map.of("imageUrl", imageUrl);
     }
 
-	@PostMapping("/save/{targetId}")
-    public void saveBoardImages(@PathVariable Long boardId,@PathVariable String content) {
+	@PostMapping("/save/{boardId}")
+    public void saveBoardImages(@PathVariable Long boardId,@RequestBody String content) {
 		boardImageService.saveImages(boardId, content);
 	}
     

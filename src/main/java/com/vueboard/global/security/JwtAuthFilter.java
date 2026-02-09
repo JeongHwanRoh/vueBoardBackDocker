@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
-
+	
 	private final JwtUtil jwtUtil;
 	private final CookieUtil cookieUtil;
 	private final AuthService authservice;
@@ -33,10 +33,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		
+		log.error("🔥 JwtAuthFilter HIT: {} {}", request.getMethod(), request.getRequestURI());
 
-		// 이미지 업로드 또는 저장 시 인증 필터 패스하도록 설정
 		String uri = request.getRequestURI();
-		if (isPermitAllPath(uri) || uri.startsWith("/board/image/")) {
+		// OPTIONS 요청은 무조건 통과 
+		// 프런트에서 쿠키를 포함해 요청하기 때문에(withCredentials:true)
+		// 보안적으로 OPTIONS가 발생함.
+		// 이 예외상황에서도 JWT 검사 제외한다.
+		if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+
+		// 이미지 관련 API는 JWT 검사 제외
+		if (uri.startsWith("/board/image/")) {
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -57,11 +68,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 		filterChain.doFilter(request, response);
 
-	}
-
-	private boolean isPermitAllPath(String uri) {
-		return uri.equals("/login") || uri.equals("/logout") || uri.equals("/join/memberJoin")
-				|| uri.startsWith("/board/image/");
 	}
 
 }
