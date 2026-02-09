@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vueboard.domains.image.mapper.ImageSaveMapper">
+
+    <!-- 게시글 이미지 PK 생성 -->
+    <select id="nextImageId" resultType="long">
+        SELECT SEQ_BOARD_IMAGE.NEXTVAL
+        FROM DUAL
+    </select>
+
+    <!-- 게시글 이미지 저장 -->
+    <insert id="insert"
+            parameterType="com.vueboard.domains.image.entity.SavedBoardImage">
+        INSERT INTO TB_BOARD_IMAGE (
+            IMAGE_ID,
+            BOARD_ID,
+            ORIGINAL_NAME,
+            STORED_NAME,
+            IMAGE_URL,
+            FILE_SIZE,
+            CREATED_AT
+        ) VALUES (
+            #{imageId},
+            #{boardId},
+            #{originalName},
+            #{storedName},
+            #{imageUrl},
+            #{fileSize},
+            SYSTIMESTAMP
+        )
+    </insert>
+
+</mapper>

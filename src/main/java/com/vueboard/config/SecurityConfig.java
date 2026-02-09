@@ -27,10 +27,19 @@ public class SecurityConfig {
 		http.cors(Customizer.withDefaults()) // 시큐리티에 WebConfig에서 설정한 CORS 설정 추가
 				.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.logout(logout->logout.disable()) // Security 기본 LogoutFilter 비활성화 (/logout 컨토롤려 요청과 충돌 때문)
+				.logout(logout -> logout.disable()) // Security 기본 LogoutFilter 비활성화 (/logout 컨토롤려 요청과 충돌 때문)
 				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-						.requestMatchers("/login", "/logout", "/join/memberJoin", "/board/image/**").permitAll().anyRequest()
-						.authenticated())
+
+						// 인증/회원 관련
+						.requestMatchers("/login", "/logout", "/join/memberJoin").permitAll()
+
+						// 이미지 업로드/저장
+						.requestMatchers("/board/image/upload", "/board/image/save/**").permitAll()
+
+						// 게시글/기타 API
+						.requestMatchers("/board/**").authenticated()
+
+						.anyRequest().authenticated())
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();

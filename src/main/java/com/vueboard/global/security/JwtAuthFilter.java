@@ -33,14 +33,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
-		// 이미지 업로드 시 인증 필터 패스하도록 설정
+
+		// 이미지 업로드 또는 저장 시 인증 필터 패스하도록 설정
 		String uri = request.getRequestURI();
-		if (uri.startsWith("/board/image/")) {
+		if (isPermitAllPath(uri) || uri.startsWith("/board/image/")) {
 			filterChain.doFilter(request, response);
 			return;
 		}
-		
+
 		String token = CookieUtil.resolveAccessTokenFromCookie(request); // 쿠키에서 accessToken 검증
 
 		if (token != null && jwtUtil.validateAccessToken(token)) {
@@ -58,4 +58,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 
 	}
+
+	private boolean isPermitAllPath(String uri) {
+		return uri.equals("/login") || uri.equals("/logout") || uri.equals("/join/memberJoin")
+				|| uri.startsWith("/board/image/");
+	}
+
 }

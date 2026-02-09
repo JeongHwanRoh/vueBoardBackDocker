@@ -8,7 +8,8 @@
 
 	<!-- 업로드 시 imageId 자동생성 -->
 	<select id="nextTempImageId" resultType="long">
-		SELECT SEQ_TEMP_IMAGE.NEXTVAL FROM DUAL
+		SELECT
+		SEQ_TEMP_IMAGE.NEXTVAL FROM DUAL
 	</select>
 
 	<!-- 업로드 이미지 저장 -->
@@ -30,5 +31,18 @@
 		SYSTIMESTAMP
 		)
 	</insert>
+
+	<!--imageUrl 기준 업로드된 이미지 조회 -->
+	<select id="findByImageUrls" parameterType="list"
+		resultType="com.vueboard.domains.image.entity.UploadedTempImage">
+		SELECT *
+		FROM TB_TEMP_IMAGE
+		WHERE IMAGE_URL IN
+		<foreach collection="list" item="url" open="(" close=")"
+			separator=",">
+			#{url}
+		</foreach>
+
+	</select>
 
 </mapper>
