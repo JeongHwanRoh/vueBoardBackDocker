@@ -34,10 +34,14 @@ public class AuthService {
 		}
 
 		String accessToken = jwtutil.generateAccessToken(user);
-		Cookie accessCookie = cookieUtil.createAccessTokenCookie("accessToken", accessToken);
-
-		response.addCookie(accessCookie);
-
+		
+		// createAccessTokenCookie: SameSite=None이 불가한 레거시 코드 (삭제)
+//		Cookie accessCookie = cookieUtil.createAccessTokenCookie("accessToken", accessToken);
+//		response.addCookie(accessCookie);
+		
+		// addAccessTokenCookie() + CookieUtil에서 samesite=none 설정 등 => crosssite에서도 브라우저가 쿠키 전달하도록 설정
+		cookieUtil.addAccessTokenCookie(response, "accessToken", accessToken);
+		
 		return user;
 	}
 

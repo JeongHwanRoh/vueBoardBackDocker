@@ -21,11 +21,13 @@
 		ORDER BY BOARD_ID DESC
 		) A
 		)
-		WHERE rnum BETWEEN #{offset}+1 AND #{offset}+#{size}
+		WHERE rnum BETWEEN #{offset}+1
+		AND #{offset}+#{size}
 
 	</select>
 
-	<select id="selectRecentFiveBoards" resultType="com.vueboard.domains.board.entity.Board">
+	<select id="selectRecentFiveBoards"
+		resultType="com.vueboard.domains.board.entity.Board">
 		SELECT * FROM (
 		SELECT ROWNUM AS rnum, A.* FROM (
 		SELECT
@@ -46,7 +48,8 @@
 	</select>
 
 	<select id="selectTotalCount" resultType="int">
-		SELECT COUNT(*) FROM TB_BOARD
+		SELECT COUNT(*) FROM
+		TB_BOARD
 	</select>
 
 	<select id="getBoardById" parameterType="long"
@@ -63,20 +66,26 @@
 		FROM TB_BOARD
 		WHERE BOARD_ID = #{boardId}
 	</select>
-
+	<!--useGeneratedKeys, keyProperty: 
+	방금 insert한 auto increment가 걸린 pk값을 바로 사용하고 싶을 떄 사용한다.  -->
 	<insert id="insertBoard"
-		parameterType="com.vueboard.domains.board.entity.Board">
+		parameterType="com.vueboard.domains.board.entity.Board"
+		useGeneratedKeys="true" keyProperty="boardId"
+		keyColumn="BOARD_ID">
 		INSERT INTO TB_BOARD
-		(TITLE, CONTENT, WRITER, PN, REGDATE, VIEWCNT)
+		(TITLE,
+		CONTENT, WRITER, PN, REGDATE, VIEWCNT)
 		VALUES
-		(#{title}, #{content}, #{writer}, #{pn}, SYSDATE, 0)
+		(#{title}, #{content},
+		#{writer}, #{pn}, SYSDATE, 0)
 	</insert>
 
 	<update id="updateBoard"
 		parameterType="com.vueboard.domains.board.entity.Board">
 		UPDATE TB_BOARD
 		SET TITLE = #{title},
-		CONTENT = #{content},
+		CONTENT =
+		#{content},
 		REGDATE = SYSDATE
 		WHERE BOARD_ID = #{boardId}
 	</update>

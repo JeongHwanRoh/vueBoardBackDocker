@@ -36,10 +36,14 @@ public class BoardImageService {
 			return;
 		}
 		
+		System.out.println("content값: "+ content);
+		System.out.println("imageUrls값: "+ imageUrls);
+		
 		// 2. 임시 저장된 이미지 조회
 		List<UploadedTempImage> tempImages=uploadMapper.findByImageUrls(imageUrls);
-		
+		System.out.println("tempImages 리스트" + tempImages);
 		for(UploadedTempImage temp:tempImages) {
+			System.out.println("temp값"+temp);
 			// 3. 파일 이동
 			moveFile(boardId, temp.getStoredName());
 			
@@ -54,6 +58,9 @@ public class BoardImageService {
             image.setFileSize(temp.getFileSize());          
             
             saveMapper.insert(image);
+            
+            // temp_image 삭제
+            uploadMapper.deleteById(temp.getTempImgId());
             
 			
 		}

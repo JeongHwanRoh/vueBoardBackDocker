@@ -2,6 +2,7 @@ package com.vueboard.domains.image.controller;
 
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,23 +24,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/board/image")
 public class ImageController {
-	
+
 	private final ImageUploadService imageUploadService;
 	private final BoardImageService boardImageService;
 
 	@PostMapping("/upload")
-    public Map<String, String> uploadImage(
-            @RequestParam("file") MultipartFile file
-    ) {
-        String imageUrl = imageUploadService.uploadImage(file);
-        return Map.of("imageUrl", imageUrl);
-    }
+	public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file) {
+		String imageUrl = imageUploadService.uploadImage(file);
+		return Map.of("imageUrl", imageUrl);
+	}
 
 	@PostMapping("/save/{boardId}")
-    public void saveBoardImages(@PathVariable Long boardId,@RequestBody String content) {
+	public ResponseEntity<Boolean> saveBoardImages(@PathVariable Long boardId, @RequestBody Map<String, String> body) {
+		String content = body.get("content");
 		boardImageService.saveImages(boardId, content);
+		
+		return ResponseEntity.ok(true);
 	}
-    
-	
 
 }

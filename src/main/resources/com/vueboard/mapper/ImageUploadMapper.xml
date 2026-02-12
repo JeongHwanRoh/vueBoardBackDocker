@@ -35,7 +35,12 @@
 	<!--imageUrl 기준 업로드된 이미지 조회 -->
 	<select id="findByImageUrls" parameterType="list"
 		resultType="com.vueboard.domains.image.entity.UploadedTempImage">
-		SELECT *
+		SELECT
+		TEMP_IMAGE_ID,
+        ORIGINAL_NAME,
+        STORED_NAME,
+        IMAGE_URL,
+        FILE_SIZE
 		FROM TB_TEMP_IMAGE
 		WHERE IMAGE_URL IN
 		<foreach collection="list" item="url" open="(" close=")"
@@ -44,5 +49,11 @@
 		</foreach>
 
 	</select>
+	
+	<!--이미지 저장 시 기존 Tempimage 삭제하기 -->
+	<delete id="deleteById">
+	DELETE FROM TB_TEMP_IMAGE
+	WHERE TEMP_IMAGE_ID=#{tempImgId}
+	</delete>
 
 </mapper>

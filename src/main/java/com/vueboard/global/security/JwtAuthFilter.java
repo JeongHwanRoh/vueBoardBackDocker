@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
-	
+
 	private final JwtUtil jwtUtil;
 	private final CookieUtil cookieUtil;
 	private final AuthService authservice;
@@ -33,11 +33,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
+
 		log.error("🔥 JwtAuthFilter HIT: {} {}", request.getMethod(), request.getRequestURI());
 
 		String uri = request.getRequestURI();
-		// OPTIONS 요청은 무조건 통과 
+		// OPTIONS 요청은 무조건 통과
 		// 프런트에서 쿠키를 포함해 요청하기 때문에(withCredentials:true)
 		// 보안적으로 OPTIONS가 발생함.
 		// 이 예외상황에서도 JWT 검사 제외한다.
@@ -46,12 +46,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		// 이미지 관련 API는 JWT 검사 제외
-		if (uri.startsWith("/board/image/")) {
-			filterChain.doFilter(request, response);
-			return;
-		}
-
+		// JWT 검사 제외 경로
+	    if (isPublicPath(uri)) {
+	        filterChain.doFilter(request, response);
+	        return;
+	    }
+	    
 		String token = CookieUtil.resolveAccessTokenFromCookie(request); // 쿠키에서 accessToken 검증
 
 		if (token != null && jwtUtil.validateAccessToken(token)) {
@@ -69,5 +69,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 
 	}
+	
+	// 로그인 없이도 접근 가능한 URI들
+	private boolean isPublicPath(String uri) {
+	    return uri.startsWith("/board/image/")
+	        || uri.startsWith("/uploads/")
+	        || uri.startsWith("/login")
+	        || uri.startsWith("/join");
+	}
 
 }
+
+

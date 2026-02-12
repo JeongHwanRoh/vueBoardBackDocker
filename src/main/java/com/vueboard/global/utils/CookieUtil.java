@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 // 쿠키 관련 유틸 모음.
@@ -12,6 +13,16 @@ import lombok.RequiredArgsConstructor;
 public class CookieUtil {
 
 	private final JwtUtil jwtutil;
+
+	/** Cross-Origin 요청에서 쿠키 전송(브라우저가 쿠키 전송하도록 설정) */
+	public void addAccessTokenCookie(HttpServletResponse response, String tokenName, String token) {
+		int maxAge = (int) (jwtutil.getAccessTokenExpiration() / 1000);
+
+		String cookie = tokenName + "=" + token + "; Path=/" + "; HttpOnly" + "; SameSite=None" + "; Max-Age=" + maxAge
+				+ "; Secure=false"; // local 개발환경
+
+		response.addHeader("Set-Cookie", cookie);
+	}
 
 	/** AccessToken 쿠키 발급 */
 	public Cookie createAccessTokenCookie(String tokenName, String token) {
@@ -35,10 +46,10 @@ public class CookieUtil {
 		 * (true) 반환
 		 */
 		if (autoLogin) {
-			refreshTokenCookie.setMaxAge((int)(jwtutil.getRefreshTokenExpiration() / 1000));
+			refreshTokenCookie.setMaxAge((int) (jwtutil.getRefreshTokenExpiration() / 1000));
 			// 클라이언트에서 30일 유지.(자동 로그인을 위한) !! 서버 측이 아님. 서버측은 jwtUtil에 있음.
 		} else {
-			refreshTokenCookie.setMaxAge((int)(jwtutil.getGeneralRefreshTokenExpiration() / 1000));
+			refreshTokenCookie.setMaxAge((int) (jwtutil.getGeneralRefreshTokenExpiration() / 1000));
 		}
 		return refreshTokenCookie;
 	}

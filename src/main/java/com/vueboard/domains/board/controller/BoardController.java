@@ -1,5 +1,7 @@
 package com.vueboard.domains.board.controller;
 
+import com.vueboard.domains.auth.dto.UserResponseDTO;
+import com.vueboard.domains.board.dto.BoardImageResponseDTO;
 import com.vueboard.domains.board.dto.BoardResponseDTO;
 import com.vueboard.domains.board.entity.Board;
 import com.vueboard.domains.board.mapper.BoardMapper;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -52,15 +55,15 @@ public class BoardController {
 
 		return result;
 	}
-	
-	// 게시글 번호 기준 최신 5개 게시물 조회 
+
+	// 게시글 번호 기준 최신 5개 게시물 조회
 	@GetMapping("/listRecentFive")
-	public Map<String, Object> getRecentFiveBoards(){
+	public Map<String, Object> getRecentFiveBoards() {
 		List<Board> boards = boardService.getRecentFiveBoardList(); // 게시글번호 기준 최근 5개 불러오기
 		Map<String, Object> result = new HashMap<>();
 		result.put("boards", boards);
 		return result;
-		
+
 	}
 
 	// 특정 게시글 조회
@@ -71,9 +74,16 @@ public class BoardController {
 
 	// 게시글 등록
 	@PostMapping("/create")
-	public String createBoard(@RequestBody Board board) {
-		int result = boardService.insertBoard(board);
-		return result > 0 ? "success" : "fail";
+	public ResponseEntity<BoardImageResponseDTO> createBoard(@RequestBody Board board, Authentication authentication) {
+		UserResponseDTO user = (UserResponseDTO) authentication.getPrincipal();
+
+		board.setPn(user.getPn());
+		board.setWriter(user.getName());
+
+		boardService.insertBoard(board);
+
+		// 이제 여기서 boardId가 들어있음
+		return ResponseEntity.ok(BoardImageResponseDTO.success(board.getBoardId()));
 	}
 
 	// 게시글 수정
@@ -87,12 +97,12 @@ public class BoardController {
 		// 2. jwt에서 pn값 뽑아내기
 		long pn = Integer.parseInt(jwtutil.extractPn(accessToken));
 		System.out.println("pn값 :" + pn);
-		
-        // 3. PathVariable로 받은 boardId를 엔터티에 주입
+
+		// 3. PathVariable로 받은 boardId를 엔터티에 주입
 		board.setBoardId(boardId);
-		
+
 		// 4. 서비스 호출
-		BoardResponseDTO dto= boardService.updateBoard(board,pn);
+		BoardResponseDTO dto = boardService.updateBoard(board, pn);
 
 		return ResponseEntity.ok(dto);
 	}
