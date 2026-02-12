@@ -36,7 +36,7 @@
 	<select id="findByImageUrls" parameterType="list"
 		resultType="com.vueboard.domains.image.entity.UploadedTempImage">
 		SELECT
-		TEMP_IMAGE_ID,
+		TEMP_IMAGE_ID AS tempImgId,
         ORIGINAL_NAME,
         STORED_NAME,
         IMAGE_URL,
