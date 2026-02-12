@@ -66,19 +66,34 @@
 		FROM TB_BOARD
 		WHERE BOARD_ID = #{boardId}
 	</select>
-	<!--useGeneratedKeys, keyProperty: 
-	방금 insert한 auto increment가 걸린 pk값을 바로 사용하고 싶을 떄 사용한다.  -->
+	<!--useGeneratedKeys, keyProperty: 방금 insert한 auto increment가 걸린 pk값을 바로 
+		사용하고 싶을 떄 사용한다. -->
 	<insert id="insertBoard"
 		parameterType="com.vueboard.domains.board.entity.Board"
-		useGeneratedKeys="true" keyProperty="boardId"
-		keyColumn="BOARD_ID">
-		INSERT INTO TB_BOARD
+		useGeneratedKeys="true" keyProperty="boardId" keyColumn="BOARD_ID">
+		INSERT INTO
+		TB_BOARD
 		(TITLE,
 		CONTENT, WRITER, PN, REGDATE, VIEWCNT)
 		VALUES
-		(#{title}, #{content},
+		(#{title},
+		#{content},
 		#{writer}, #{pn}, SYSDATE, 0)
 	</insert>
+
+	<update id="updateBoardContent"
+		parameterType="long">
+		UPDATE TB_BOARD
+		SET CONTENT = REGEXP_REPLACE(
+		CONTENT,
+		'/uploads/temp/',
+		'/uploads/board/' || BOARD_ID || '/'
+		)
+		WHERE BOARD_ID = #{boardId}
+
+	</update>
+
+
 
 	<update id="updateBoard"
 		parameterType="com.vueboard.domains.board.entity.Board">

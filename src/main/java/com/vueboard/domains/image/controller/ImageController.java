@@ -3,6 +3,7 @@ package com.vueboard.domains.image.controller;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +41,13 @@ public class ImageController {
 		boardImageService.saveImages(boardId, content);
 		
 		return ResponseEntity.ok(true);
+	}
+	
+	@DeleteMapping("/delete/{boardId}")
+	public String deleteImages(@PathVariable Long boardId) {
+		int result=boardImageService.deleteImages(boardId);
+		return result>0 ? "success" : "fail";
+		
 	}
 
 }

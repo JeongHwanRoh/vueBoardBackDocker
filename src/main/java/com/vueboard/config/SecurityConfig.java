@@ -32,7 +32,8 @@ public class SecurityConfig {
 				// OPTIONS(CORS preflight) 
 				// permitAll() : 로그인 없이도 security filter 통과 가능
 				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-						.requestMatchers("/login", "/logout", "/join/**", "/board/image/**", "/uploads/**").permitAll()
+						.requestMatchers("/login", "/logout", "/join/**", "/board/image/**", "/uploads/**"
+								,"/board/content/**").permitAll()
 						// 나머지는 전부 로그인 인증 필요
 						.anyRequest().authenticated())
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

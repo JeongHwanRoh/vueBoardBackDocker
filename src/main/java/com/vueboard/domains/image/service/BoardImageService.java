@@ -98,4 +98,9 @@ public class BoardImageService {
 		return urls;
 	}
 
+	public int deleteImages(Long boardId) {
+		// TODO Auto-generated method stub
+		return saveMapper.deleteImages(boardId) ;
+	}
+
 }

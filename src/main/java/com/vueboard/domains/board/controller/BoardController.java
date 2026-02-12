@@ -85,7 +85,14 @@ public class BoardController {
 		// 이제 여기서 boardId가 들어있음
 		return ResponseEntity.ok(BoardImageResponseDTO.success(board.getBoardId()));
 	}
-
+	
+	// TB_BOARD.CONTENT 내 이미지 URL 경로도 TB_BOARD_IMAGE의 IMAGE_URL로 변경 처리 (SQL 쿼리로 처리)
+	@PutMapping("/content/update/{boardId}")
+	public BoardResponseDTO updateBoardContent(@PathVariable Long boardId){
+		return boardService.updateBoardContent(boardId);
+	}
+	
+	
 	// 게시글 수정
 	@PutMapping("/update/{boardId}")
 	public ResponseEntity<BoardResponseDTO> updateBoard(@PathVariable Long boardId, @RequestBody Board board,

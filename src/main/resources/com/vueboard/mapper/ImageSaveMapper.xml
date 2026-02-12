@@ -32,5 +32,10 @@
             SYSTIMESTAMP
         )
     </insert>
-
+    
+    <!-- 게시글 이미지 삭제  -->
+	<delete id="deleteImages" parameterType="long">
+		DELETE FROM TB_BOARD_IMAGE
+		WHERE BOARD_ID=#{boardId}
+	</delete>
 </mapper>

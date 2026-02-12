@@ -7,6 +7,7 @@ public interface ImageSaveMapper {
 
 	Long nextImageId();
 	void insert(SavedBoardImage image);
+	int deleteImages(Long boardId);
 
 
 

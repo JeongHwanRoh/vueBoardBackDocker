@@ -2,6 +2,7 @@ package com.vueboard.domains.board.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.vueboard.domains.auth.entity.User;
@@ -81,6 +82,13 @@ public class BoardService {
 
 		return boardMapper.deleteBoard(boardId);
 
+	}
+	// TB_BOARD.CONTENT 내 이미지 URL 경로도 TB_BOARD_IMAGE의 IMAGE_URL로 변경 처리 (SQL 쿼리로 처리)
+	public BoardResponseDTO updateBoardContent(Long boardId) {
+		boardMapper.updateBoardContent(boardId);
+		Board updatedBoard = boardMapper.getBoardById(boardId);
+		return new BoardResponseDTO(updatedBoard);
+		
 	}
 
 }
