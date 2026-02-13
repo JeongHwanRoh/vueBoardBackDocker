@@ -61,7 +61,7 @@ public class BoardService {
 		Board existing = boardMapper.getBoardById(board.getBoardId());
 		// 2. 본인만 수정 가능하게 작성자 검증(pn을 기준으로)
 		if (!existing.getPn().equals(pn)) {
-			throw new SecurityException("본인이 작성한 공지만 수정 가능합니다.");
+			throw new SecurityException("본인이 작성한 게시글만 수정 가능합니다.");
 
 		}
 		// 3. 수정 후 Board 엔터티에 반영
@@ -78,9 +78,16 @@ public class BoardService {
 	}
 
 	// 게시글 삭제
-	public int deleteBoard(long boardId) {
-
-		return boardMapper.deleteBoard(boardId);
+	public String deleteById(long boardId, long pn) {
+		// 1.기존 글 가져오기
+		 Board existing=boardMapper.getBoardById(boardId);
+		 
+		// 2. 본인만 삭제 가능하게 작성자 검증
+		if(!existing.getPn().equals(pn)) {
+			throw new SecurityException("본인이 작성한 게시글만 삭제 가능합니다.");
+		}
+		boardMapper.deleteById(boardId);
+		return "게시글이 성공적으로 삭제되었습니다.";
 
 	}
 	// TB_BOARD.CONTENT 내 이미지 URL 경로도 TB_BOARD_IMAGE의 IMAGE_URL로 변경 처리 (SQL 쿼리로 처리)

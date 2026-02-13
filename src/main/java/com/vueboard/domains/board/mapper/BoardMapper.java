@@ -18,7 +18,7 @@ public interface BoardMapper {
 	Board getBoardById(Long boardId); // 특정 게시글 조회
    int insertBoard(Board board); // 게시글 등록
     int updateBoard(Board board);  // 게시글 수정
-    int deleteBoard(Long boardId); // 게시글 삭제
+    int deleteById(Long boardId); // 게시글 삭제
     int updateBoardContent(Long boardId); // TB_BOARD.CONTENT 내 이미지 URL 경로도 TB_BOARD_IMAGE의 IMAGE_URL로 변경 처리 (SQL 쿼리로 처리)
 }
 

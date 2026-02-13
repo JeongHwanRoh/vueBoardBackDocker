@@ -105,7 +105,7 @@
 		WHERE BOARD_ID = #{boardId}
 	</update>
 
-	<delete id="deleteBoard" parameterType="long">
+	<delete id="deleteById" parameterType="long">
 		DELETE FROM TB_BOARD
 		WHERE BOARD_ID = #{boardId}
 	</delete>

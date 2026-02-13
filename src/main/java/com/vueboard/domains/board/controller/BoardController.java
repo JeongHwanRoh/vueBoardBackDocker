@@ -31,8 +31,8 @@ public class BoardController {
 
 	private final BoardService boardService;
 	private final BoardMapper boardMapper;
-	private final CookieUtil cookieutil;
-	private final JwtUtil jwtutil;
+	private final CookieUtil cookieUtil;
+	private final JwtUtil jwtUtil;
 
 	// 전체 게시글 목록
 //	@GetMapping("/list")
@@ -98,11 +98,11 @@ public class BoardController {
 	public ResponseEntity<BoardResponseDTO> updateBoard(@PathVariable Long boardId, @RequestBody Board board,
 			HttpServletRequest request) {
 		// 1. 쿠키에서 액세스 토큰 추출
-		String accessToken = cookieutil.resolveAccessTokenFromCookie(request);
+		String accessToken = cookieUtil.resolveAccessTokenFromCookie(request);
 		System.out.println("accessToken값 :" + accessToken);
 
 		// 2. jwt에서 pn값 뽑아내기
-		long pn = Integer.parseInt(jwtutil.extractPn(accessToken));
+		long pn = Integer.parseInt(jwtUtil.extractPn(accessToken));
 		System.out.println("pn값 :" + pn);
 
 		// 3. PathVariable로 받은 boardId를 엔터티에 주입
@@ -116,9 +116,14 @@ public class BoardController {
 
 	// 게시글 삭제
 	@DeleteMapping("/delete/{boardId}")
-	public String deleteBoard(@PathVariable Long boardId) {
-		int result = boardService.deleteBoard(boardId);
-		return result > 0 ? "success" : "fail";
+	public ResponseEntity<String> deleteBoard(@PathVariable Long boardId, HttpServletRequest request) {
+		// 1. 쿠키에서 액세스 토큰 추출
+		String accessToken=cookieUtil.resolveAccessTokenFromCookie(request);
+		// 2. 쿠키에서 추출한 액세스 토큰으로 pn값 뽑아내기
+		long pn=Integer.parseInt(jwtUtil.extractPn(accessToken));
+		// 3. 서비스 호출
+		String result=boardService.deleteById(boardId, pn);
+		return ResponseEntity.ok(result); // 200 ok와 함께 메시지 리턴
 	}
 
 }
