@@ -32,14 +32,4 @@ public class KanbanCardController {
 		return ResponseEntity.ok(kanbanCards);
 	}
 
-	// 칸반보드 Card 조회 (path variable) - backward compatibility
-	// 예: /kanban/card/list/{boardId}
-	@GetMapping("/list/{boardId}")
-	public ResponseEntity<List<KanbanCard>> getKanbanCardByPath(@PathVariable String boardId) {
-		if (boardId == null || boardId.isBlank()) {
-			return ResponseEntity.badRequest().build();
-		}
-		List<KanbanCard> kanbanCards = kanbanCardService.getKanbanCardsByBoardId(boardId);
-		return ResponseEntity.ok(kanbanCards);
-	}
 }
