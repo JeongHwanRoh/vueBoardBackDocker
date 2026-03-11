@@ -2,13 +2,17 @@ package com.vueboard.domains.kanban.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vueboard.domains.kanban.dto.CreateCardDTO;
+import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
 import com.vueboard.domains.kanban.entity.KanbanCard;
 import com.vueboard.domains.kanban.service.KanbanCardService;
 
@@ -24,12 +28,24 @@ public class KanbanCardController {
 	// 칸반보드 Card 조회 (query param)
 	// 예: /kanban/card/list?boardId=...
 	@GetMapping("/list")
-	public ResponseEntity<List<KanbanCard>> getKanbanCardByQuery(@RequestParam(required = false) String boardId) {
+	public ResponseEntity<List<KanbanColumnDTO>> getKanbanCardByQuery(@RequestParam(required = false) String boardId) {
 		if (boardId == null || boardId.isBlank()) {
 			return ResponseEntity.badRequest().build();
 		}
-		List<KanbanCard> kanbanCards = kanbanCardService.getKanbanCardsByBoardId(boardId);
+		List<KanbanColumnDTO> kanbanCards = kanbanCardService.getKanbanCardsByBoardId(boardId);
 		return ResponseEntity.ok(kanbanCards);
 	}
+
+//	// 칸반보드 Card 생성
+//	@PostMapping("/create")
+//	public ResponseEntity<KanbanCard> createKanbanCard(@RequestBody CreateCardDTO request) {
+//		System.out.println("dto값: " + request);
+//		try {
+//			KanbanCard created = kanbanCardService.createKanbanCard(request);
+//			return ResponseEntity.status(HttpStatus.CREATED).body(created);
+//		} catch (IllegalArgumentException e) {
+//			return ResponseEntity.badRequest().build();
+//		}
+//	}
 
 }

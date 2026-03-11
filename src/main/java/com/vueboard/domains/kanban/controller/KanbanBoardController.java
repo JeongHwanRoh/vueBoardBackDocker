@@ -1,13 +1,16 @@
 package com.vueboard.domains.kanban.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vueboard.domains.kanban.entity.KanbanColumns;
 import com.vueboard.domains.kanban.service.KanbanBoardService;
 import com.vueboard.global.utils.CookieUtil;
 
@@ -40,4 +43,13 @@ public class KanbanBoardController {
 		result.put("boardId", boardId);
 		return ResponseEntity.ok(result);
 	}
+	
+	@GetMapping("/column/{boardId}")
+	public ResponseEntity<?> getColumnByBoardId(@PathVariable String boardId) {
+		List<KanbanColumns> result = kanbanBoardService.getColumnByBoardId(boardId);
+		return ResponseEntity.ok(result);	
+		
+	}
+	
+	
 }

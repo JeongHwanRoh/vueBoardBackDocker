@@ -2,20 +2,62 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.vueboard.domains.kanban.mapper.KanbanCardMapper">
-	<select id="findByBoardId" parameterType="String"
+<mapper
+	namespace="com.vueboard.domains.kanban.mapper.KanbanCardMapper">
+	<select id="findByBoardId" parameterType="java.lang.String"
+		resultType="com.vueboard.domains.kanban.dto.KanbanColumnDTO">
+		SELECT
+		A.COLUMN_NAME AS columnName,
+		B.ORDER_NUM AS orderNum,
+		C.CARD_ID AS cardId,
+		B.TITLE AS title,
+		C.CARD_INFO AS cardInfo,
+		B.CREATED_AT AS createdAt,
+		B.UPDATED_AT AS updatedAt
+		FROM TB_KANBAN_COLUMN A
+		JOIN TB_KANBAN_CARD B
+		ON A.COLUMN_ID = B.COLUMN_ID
+		JOIN TB_KANBAN_CARD_INFO C
+		ON B.CARD_ID = C.CARD_ID
+		WHERE A.BOARD_ID = #{boardId}
+		ORDER BY A.COLUMN_ID ASC, B.ORDER_NUM ASC, B.CARD_ID ASC
+	</select>
+
+<!-- 	<select id="findByCardId" parameterType="long"
 		resultType="com.vueboard.domains.kanban.entity.KanbanCard">
 		SELECT
-			CARD_ID AS cardId,
-			BOARD_ID AS boardId,
-			TITLE AS title,
-			CARD_INFO AS cardInfo,
-			STATUS AS status,
-			ORDER_NUM AS orderNum,
-			CREATED_AT AS createdAt,
-			UPDATED_AT AS updatedAt
+		CARD_ID AS cardId,
+		BOARD_ID AS boardId,
+		TITLE AS title,
+		CARD_INFO AS cardInfo,
+		STATUS AS status,
+		ORDER_NUM AS orderNum,
+		CREATED_AT AS createdAt,
+		UPDATED_AT AS updatedAt
 		FROM TB_KANBAN_CARD
-		WHERE BOARD_ID = #{boardId}
-		ORDER BY ORDER_NUM ASC, CARD_ID ASC
+		WHERE CARD_ID = #{cardId}
 	</select>
+
+	<insert id="insertKanbanCard"
+		parameterType="com.vueboard.domains.kanban.dto.CreateCardDTO">
+		INSERT INTO TB_KANBAN_CARD (
+		CARD_ID,
+		BOARD_ID,
+		TITLE,
+		CARD_INFO,
+		STATUS,
+		ORDER_NUM,
+		CREATED_AT,
+		UPDATED_AT
+		) VALUES (
+		#{cardId},
+		#{boardId},
+		#{title},
+		#{cardInfo},
+		#{status},
+		#{orderNum},
+		SYSDATE,
+		SYSDATE
+		)
+	</insert> -->
 </mapper>

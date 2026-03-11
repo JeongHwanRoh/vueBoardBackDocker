@@ -2,11 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.vueboard.domains.kanban.mapper.KanbanBoardMapper">
-	<!-- boardId 조회: TB_KANBAN_BOARD.BOARD_ID(VARCHAR2) by PN(NUMBER) -->
-	<select id="getBoardIdByPn" parameterType="long" resultType="string">
+<mapper
+	namespace="com.vueboard.domains.kanban.mapper.KanbanBoardMapper">
+	<!-- boardId 조회 -->
+	<select id="getBoardIdByPn" parameterType="long"
+		resultType="string">
 		SELECT BOARD_ID
 		FROM TB_KANBAN_BOARD
 		WHERE PN = #{pn}
+	</select>
+
+	<!-- 보드 생성 -->
+	<insert id="insertKanbanBoard"
+		parameterType="com.vueboard.domains.kanban.entity.KanbanBoard">
+		INSERT INTO TB_KANBAN_BOARD (BOARD_ID, PN, BOARD_NAME,
+		CREATED_AT)
+		VALUES (
+		#{boardId},
+		#{pn},
+		#{boardName},
+		SYSDATE
+		)
+	</insert>
+
+	<!-- boardId 기준 column 가져오기 -->
+	<select id="findColumnsByBoardId" parameterType="String"
+		resultType="list">
+		SELECT *
+		FROM TB_KANBAN_COLUMN
+		WHERE BOARD_ID = #{boardId}
+
 	</select>
 </mapper>
