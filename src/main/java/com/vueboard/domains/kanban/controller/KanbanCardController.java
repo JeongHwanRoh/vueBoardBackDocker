@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vueboard.domains.kanban.dto.CreateCardDTO;
+import com.vueboard.domains.kanban.dto.CreatedKanbanCardDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
-import com.vueboard.domains.kanban.entity.KanbanCard;
 import com.vueboard.domains.kanban.service.KanbanCardService;
 
 import lombok.RequiredArgsConstructor;
@@ -36,16 +36,19 @@ public class KanbanCardController {
 		return ResponseEntity.ok(kanbanCards);
 	}
 
-//	// 칸반보드 Card 생성
-//	@PostMapping("/create")
-//	public ResponseEntity<KanbanCard> createKanbanCard(@RequestBody CreateCardDTO request) {
-//		System.out.println("dto값: " + request);
-//		try {
-//			KanbanCard created = kanbanCardService.createKanbanCard(request);
-//			return ResponseEntity.status(HttpStatus.CREATED).body(created);
-//		} catch (IllegalArgumentException e) {
-//			return ResponseEntity.badRequest().build();
-//		}
-//	}
+	// 칸반보드 Card 생성
+	// 예: /kanban/card/create?boardId=...
+	@PostMapping("/create")
+	public ResponseEntity<CreatedKanbanCardDTO> createKanbanCard(
+			@RequestParam(required = false) String boardId,
+			@RequestBody CreateCardDTO request) {
+		System.out.println("dto값: " + request);
+		try {
+			CreatedKanbanCardDTO created = kanbanCardService.createKanbanCard(boardId, request);
+			return ResponseEntity.status(HttpStatus.CREATED).body(created);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
 
 }

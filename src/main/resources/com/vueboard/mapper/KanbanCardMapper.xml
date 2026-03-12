@@ -23,41 +23,46 @@
 		ORDER BY A.COLUMN_ID ASC, B.ORDER_NUM ASC, B.CARD_ID ASC
 	</select>
 
-<!-- 	<select id="findByCardId" parameterType="long"
-		resultType="com.vueboard.domains.kanban.entity.KanbanCard">
-		SELECT
-		CARD_ID AS cardId,
-		BOARD_ID AS boardId,
-		TITLE AS title,
-		CARD_INFO AS cardInfo,
-		STATUS AS status,
-		ORDER_NUM AS orderNum,
-		CREATED_AT AS createdAt,
-		UPDATED_AT AS updatedAt
-		FROM TB_KANBAN_CARD
-		WHERE CARD_ID = #{cardId}
+	<!-- 1단계: columnId 조회 -->
+	<select id="findColumnId" resultType="string">
+		SELECT COLUMN_ID
+		FROM TB_KANBAN_COLUMN
+		WHERE BOARD_ID = #{boardId}
+		AND COLUMN_NAME = #{columnName}
 	</select>
 
-	<insert id="insertKanbanCard"
-		parameterType="com.vueboard.domains.kanban.dto.CreateCardDTO">
-		INSERT INTO TB_KANBAN_CARD (
-		CARD_ID,
-		BOARD_ID,
-		TITLE,
-		CARD_INFO,
-		STATUS,
-		ORDER_NUM,
-		CREATED_AT,
-		UPDATED_AT
-		) VALUES (
+	<!-- 2단계: orderNum 계산 (없으면 0부터 시작) -->
+	<select id="nextOrderNum" parameterType="string" resultType="long">
+		SELECT NVL(MAX(ORDER_NUM), -1) + 1
+		FROM TB_KANBAN_CARD
+		WHERE COLUMN_ID = #{columnId}
+	</select>
+
+	<!-- 3단계: 시퀀스에서 cardId 가져오기 -->
+	<select id="nextCardId" resultType="long">
+		SELECT seq_kanban_cards.NEXTVAL
+		FROM dual
+	</select>
+
+	<!-- 3단계: TB_KANBAN_CARD insert -->
+	<insert id="insertKanbanCard" parameterType="com.vueboard.domains.kanban.entity.KanbanCard">
+		INSERT INTO TB_KANBAN_CARD(CARD_ID, COLUMN_ID, TITLE, ORDER_NUM, CREATED_AT, UPDATED_AT)
+		VALUES(
 		#{cardId},
-		#{boardId},
+		#{columnId},
 		#{title},
-		#{cardInfo},
-		#{status},
 		#{orderNum},
 		SYSDATE,
 		SYSDATE
 		)
-	</insert> -->
+	</insert>
+
+	<!-- 4단계: TB_KANBAN_CARD_INFO insert -->
+	<insert id="insertKanbanCardInfo">
+		INSERT INTO TB_KANBAN_CARD_INFO(CARD_ID, CARD_INFO)
+		VALUES(
+		#{cardId},
+		#{cardInfo}
+		)
+	</insert>
 </mapper>
