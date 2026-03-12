@@ -4,14 +4,6 @@
 
 <mapper
 	namespace="com.vueboard.domains.kanban.mapper.KanbanBoardMapper">
-	<!-- boardId 조회 -->
-	<select id="getBoardIdByPn" parameterType="long"
-		resultType="string">
-		SELECT BOARD_ID
-		FROM TB_KANBAN_BOARD
-		WHERE PN = #{pn}
-	</select>
-
 	<!-- 보드 생성 -->
 	<insert id="insertKanbanBoard"
 		parameterType="com.vueboard.domains.kanban.entity.KanbanBoard">
@@ -25,12 +17,27 @@
 		)
 	</insert>
 
-	<!-- boardId 기준 column 가져오기 -->
-	<select id="findColumnsByBoardId" parameterType="String"
-		resultType="list">
-		SELECT *
-		FROM TB_KANBAN_COLUMN
-		WHERE BOARD_ID = #{boardId}
+	<!--COLUMN 생성 -->
+	<insert id="insertDefaultColumns">
+		INSERT INTO TB_KANBAN_COLUMN(COLUMN_ID, BOARD_ID,
+		COLUMN_NAME, ORDER_NUM, CREATED_AT, UPDATED_AT)
+		VALUES(
+		seq_kanban_column.NEXTVAL,
+		#{boardId},
+		#{columnName},
+		#{orderNum},
+		SYSDATE,
+		SYSDATE
+		)
+	</insert>
 
+	<!-- boardId 조회 -->
+	<select id="getBoardIdByPn" parameterType="long"
+		resultType="string">
+		SELECT BOARD_ID
+		FROM TB_KANBAN_BOARD
+		WHERE PN = #{pn}
 	</select>
+
+
 </mapper>

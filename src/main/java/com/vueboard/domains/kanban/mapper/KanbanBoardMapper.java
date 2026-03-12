@@ -16,6 +16,6 @@ public interface KanbanBoardMapper {
 
 	int insertKanbanBoard(KanbanBoard kanbanBoard);
 
-	List<KanbanColumns> findColumnByBoardId(String boardId);
+	int insertDefaultColumns(String boardId, String columnName, long orderNum);
 
 }

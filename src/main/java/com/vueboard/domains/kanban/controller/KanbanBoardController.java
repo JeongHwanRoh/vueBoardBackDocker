@@ -32,8 +32,9 @@ public class KanbanBoardController {
 	 */
 	@GetMapping("/boardId")
 	public ResponseEntity<Map<String, Object>> getBoardId(HttpServletRequest request) {
-		String accessToken = cookieUtil.resolveAccessTokenFromCookie(request);
-		String boardId = kanbanBoardService.getBoardIdByAccessToken(accessToken);
+		String accessToken = cookieUtil.resolveAccessTokenFromCookie(request); // 쿠키에서 accessToken 추출
+		String boardId = kanbanBoardService.getBoardIdByAccessToken(accessToken); // accessToken으로 pn추출-> boardId 생성 -> boardId 조회(accessToken->pn->boardId)
+		
 
 		if (boardId == null || boardId.isBlank()) {
 			return ResponseEntity.notFound().build();
@@ -44,12 +45,6 @@ public class KanbanBoardController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping("/column/{boardId}")
-	public ResponseEntity<?> getColumnByBoardId(@PathVariable String boardId) {
-		List<KanbanColumns> result = kanbanBoardService.getColumnByBoardId(boardId);
-		return ResponseEntity.ok(result);	
-		
-	}
-	
+
 	
 }
