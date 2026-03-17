@@ -14,9 +14,9 @@ public interface KanbanCardMapper {
 
 	List<KanbanColumnDTO> findByBoardId(@Param("boardId") String boardId);
 	
-	String findColumnId(@Param("boardId") String boardId, @Param("columnName") String columnName);
+	long findColumnId(@Param("boardId") String boardId, @Param("columnName") String columnName);
 
-	long nextOrderNum(@Param("columnId") String columnId);
+	long nextOrderNum(@Param("columnId") long columnId);
 
 	long nextCardId();
 

@@ -34,7 +34,7 @@ public class KanbanCardService {
 	public CreatedKanbanCardDTO createKanbanCard(String boardId, CreateCardDTO request) {
 
 		// 1) columnId 조회
-		String columnId = kanbanCardMapper.findColumnId(boardId, request.getColumnName());
+		long columnId = kanbanCardMapper.findColumnId(boardId, request.getColumnName());
 		// 2) orderNum 계산
 		long orderNum = kanbanCardMapper.nextOrderNum(columnId);
 

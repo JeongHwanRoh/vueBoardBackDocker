@@ -28,7 +28,7 @@
 
 	<!--Card insert -->
 	<!-- 1단계: columnId 조회 -->
-	<select id="findColumnId" resultType="string">
+	<select id="findColumnId" resultType="long">
 		SELECT COLUMN_ID
 		FROM
 		TB_KANBAN_COLUMN
@@ -38,7 +38,7 @@
 	</select>
 
 	<!-- 2단계: orderNum 계산 (없으면 0부터 시작) -->
-	<select id="nextOrderNum" parameterType="string"
+	<select id="nextOrderNum" parameterType="long"
 		resultType="long">
 		SELECT NVL(MAX(ORDER_NUM), -1) + 1
 		FROM TB_KANBAN_CARD

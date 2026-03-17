@@ -8,7 +8,7 @@ import lombok.Data;
 public class KanbanCard {
 	
 	private long cardId;
-	private String columnId;
+	private long columnId;
 	private String title;
 	private long orderNum;
 	private LocalDateTime createdAt;

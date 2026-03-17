@@ -50,5 +50,9 @@ public class KanbanCardController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
+	
+	// 칸반보드 Card 수정
+//	@PostMapping("/update")
+//	public ResponseEntity
 
 }
