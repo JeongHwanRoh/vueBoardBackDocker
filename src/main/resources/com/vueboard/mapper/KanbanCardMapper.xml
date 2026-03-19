@@ -7,24 +7,21 @@
 	<!--KanbanColumn, Card 전체 조회 -->
 	<select id="findByBoardId" parameterType="java.lang.String"
 		resultType="com.vueboard.domains.kanban.dto.KanbanColumnDTO">
-		SELECT
-		A.COLUMN_ID AS columnId,
-		A.COLUMN_NAME AS columnName,
-		B.ORDER_NUM AS orderNum,
-		C.CARD_ID AS cardId,
-		B.TITLE AS title,
-		C.CARD_INFO AS cardInfo,
-		B.CREATED_AT AS createdAt,
+		SELECT A.COLUMN_ID AS columnId, A.COLUMN_NAME AS
+		columnName, B.ORDER_NUM AS orderNum, C.CARD_ID AS cardId, B.TITLE AS
+		title, C.CARD_INFO AS cardInfo, B.CREATED_AT AS createdAt,
 		B.UPDATED_AT AS updatedAt
 		FROM
 		TB_KANBAN_COLUMN A
 		JOIN TB_KANBAN_CARD B
 		ON A.COLUMN_ID = B.COLUMN_ID
 		JOIN TB_KANBAN_CARD_INFO C
-		ON B.CARD_ID = C.CARD_ID
+		ON B.CARD_ID =
+		C.CARD_ID
 		WHERE A.BOARD_ID =
 		#{boardId}
-		ORDER BY A.COLUMN_ID ASC, B.ORDER_NUM ASC, B.CARD_ID ASC
+		ORDER BY A.COLUMN_ID ASC,
+		B.ORDER_NUM ASC, B.CARD_ID ASC
 	</select>
 
 	<!--Card insert -->
@@ -80,7 +77,8 @@
 
 	<!-- COLUMN_ID 존재 여부 검증 -->
 	<select id="existsColumnId" resultType="int">
-		SELECT COUNT(1) FROM TB_KANBAN_COLUMN WHERE COLUMN_ID = #{columnId}
+		SELECT COUNT(1) FROM
+		TB_KANBAN_COLUMN WHERE COLUMN_ID = #{columnId}
 	</select>
 
 	<!-- TB_KANBAN_CARD UPDATE -->
@@ -89,10 +87,12 @@
 		UPDATE TB_KANBAN_CARD
 		SET
 		COLUMN_ID = #{columnId},
-		TITLE = #{title},
+		TITLE =
+		#{title},
 		ORDER_NUM = #{orderNum},
 		UPDATED_AT = SYSDATE
-		WHERE CARD_ID = #{cardId}
+		WHERE CARD_ID =
+		#{cardId}
 	</update>
 
 	<!-- TB_KANBAN_CARD_INFO UPDATE -->
@@ -103,5 +103,14 @@
 		WHERE CARD_ID = #{cardId}
 	</update>
 
+	<!-- TB_KANBAN_CARD_INFO DELETE -->
+	<delete id="deleteKanbanCardInfo" parameterType="long">
+		DELETE FROM TB_KANBAN_CARD_INFO WHERE CARD_ID = #{cardId}
+	</delete>
+
+	<!-- TB_KANBAN_CARD DELETE -->
+	<delete id="deleteKanbanCard" parameterType="long">
+		DELETE FROM TB_KANBAN_CARD WHERE CARD_ID = #{cardId}
+	</delete>
 
 </mapper>

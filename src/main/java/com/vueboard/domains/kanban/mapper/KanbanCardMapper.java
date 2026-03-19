@@ -30,4 +30,8 @@ public interface KanbanCardMapper {
 	int updateKanbanCard(KanbanCard card);
 
 	int updateKanbanCardInfo(KanbanCardInfo cardInfo);
+
+	int deleteKanbanCardInfo(long cardId);
+
+	int deleteKanbanCard(long cardId);
 }

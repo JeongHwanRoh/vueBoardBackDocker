@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,5 +69,16 @@ public class KanbanCardController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
+	
+	// 칸반보드 Card 삭제
+	@DeleteMapping("/delete")
+	public ResponseEntity<Void> deleteKanbanCard(
+			@RequestParam(required=false) long cardId) {
+		
+		kanbanCardService.deleteKanbanCard(cardId);
+		return ResponseEntity.ok().build();
+	}
+	
+	
 
 }

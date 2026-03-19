@@ -99,4 +99,19 @@ public class KanbanCardService {
 			throw new IllegalArgumentException("TB_KANBAN_CARD_INFO 업데이트 실패");
 		}
 	}
+	
+	// 카드 삭제 로직
+	public int deleteKanbanCard(long cardId) {
+		// 카드 삭제 시, TB_KANBAN_CARD_INFO도 같이 삭제되어야 함 (FK 제약조건)
+		// TB_KANBAN_CARD_INFO 먼저 삭제 -> TB_KANBAN_CARD 삭제
+		int deletedInfo = kanbanCardMapper.deleteKanbanCardInfo(cardId);
+		int deletedCard = kanbanCardMapper.deleteKanbanCard(cardId);
+		
+		if (deletedCard != 1) {
+			throw new IllegalArgumentException("TB_KANBAN_CARD 삭제 실패");
+		}
+		
+		return deletedCard; 
+		
+	}
 }
