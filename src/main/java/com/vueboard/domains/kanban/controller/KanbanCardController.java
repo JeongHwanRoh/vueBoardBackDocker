@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vueboard.domains.kanban.dto.CreateCardRequestDTO;
 import com.vueboard.domains.kanban.dto.CreateCardResponseDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
+import com.vueboard.domains.kanban.dto.ReorderCardDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.service.KanbanCardService;
 
@@ -70,6 +71,21 @@ public class KanbanCardController {
 		}
 	}
 	
+	// 칸반보드 Card 드래그앤드롭
+	@PatchMapping("/reorder")
+	public ResponseEntity<Void> reorderKanbanCard(
+			@RequestParam(required = false) String boardId,
+			@RequestBody List<ReorderCardDTO> cards) {
+		System.out.println("드래그앤드롭 요청: " + cards);
+		try {
+			kanbanCardService.reorderKanbanCard(boardId, cards);
+			return ResponseEntity.ok().build();
+		} catch (IllegalArgumentException e) {
+			System.out.println("reorder 실패 원인: " + e.getMessage());
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
 	// 칸반보드 Card 삭제
 	@DeleteMapping("/delete")
 	public ResponseEntity<Void> deleteKanbanCard(
@@ -78,6 +94,7 @@ public class KanbanCardController {
 		kanbanCardService.deleteKanbanCard(cardId);
 		return ResponseEntity.ok().build();
 	}
+	
 	
 	
 

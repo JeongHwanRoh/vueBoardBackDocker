@@ -94,23 +94,35 @@
 		WHERE CARD_ID =
 		#{cardId}
 	</update>
-
+		
 	<!-- TB_KANBAN_CARD_INFO UPDATE -->
-	<update id="updateKanbanCardInfo"
-		parameterType="com.vueboard.domains.kanban.entity.KanbanCardInfo">
-		UPDATE TB_KANBAN_CARD_INFO
-		SET CARD_INFO = #{cardInfo}
-		WHERE CARD_ID = #{cardId}
+		<update id="updateKanbanCardInfo" parameterType="com.vueboard.domains.kanban.entity.KanbanCard">
+        UPDATE TB_KANBAN_CARD_INFO
+        SET
+            CARD_INFO = #{cardInfo}
+        WHERE CARD_ID = #{cardId}
+     </update>
+     
+	<!-- TB_KANBAN_CARD REORDER (단건 업데이트) -->
+	<update id="reorderKanbanCard" parameterType="com.vueboard.domains.kanban.entity.KanbanCard">
+		UPDATE TB_KANBAN_CARD
+		SET
+			COLUMN_ID = #{card.columnId},
+			ORDER_NUM = #{card.orderNum},
+			UPDATED_AT = SYSDATE
+		WHERE CARD_ID = #{card.cardId}
 	</update>
-
+	
 	<!-- TB_KANBAN_CARD_INFO DELETE -->
 	<delete id="deleteKanbanCardInfo" parameterType="long">
-		DELETE FROM TB_KANBAN_CARD_INFO WHERE CARD_ID = #{cardId}
+		DELETE FROM
+		TB_KANBAN_CARD_INFO WHERE CARD_ID = #{cardId}
 	</delete>
 
 	<!-- TB_KANBAN_CARD DELETE -->
 	<delete id="deleteKanbanCard" parameterType="long">
-		DELETE FROM TB_KANBAN_CARD WHERE CARD_ID = #{cardId}
+		DELETE FROM
+		TB_KANBAN_CARD WHERE CARD_ID = #{cardId}
 	</delete>
 
 </mapper>

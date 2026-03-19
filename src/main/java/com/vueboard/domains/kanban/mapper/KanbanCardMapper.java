@@ -34,4 +34,6 @@ public interface KanbanCardMapper {
 	int deleteKanbanCardInfo(long cardId);
 
 	int deleteKanbanCard(long cardId);
+
+	int reorderKanbanCard(@Param("card") KanbanCard kanbanCard);
 }
