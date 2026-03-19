@@ -5,9 +5,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.vueboard.domains.kanban.dto.CreateCardDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
+import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.entity.KanbanCard;
+import com.vueboard.domains.kanban.entity.KanbanCardInfo;
 
 @Mapper
 public interface KanbanCardMapper {
@@ -16,6 +17,8 @@ public interface KanbanCardMapper {
 	
 	long findColumnId(@Param("boardId") String boardId, @Param("columnName") String columnName);
 
+	int existsColumnId(@Param("columnId") long columnId);
+
 	long nextOrderNum(@Param("columnId") long columnId);
 
 	long nextCardId();
@@ -23,4 +26,8 @@ public interface KanbanCardMapper {
 	int insertKanbanCard(KanbanCard card);
 
 	int insertKanbanCardInfo(@Param("cardId") long cardId, @Param("cardInfo") String cardInfo);
+
+	int updateKanbanCard(KanbanCard card);
+
+	int updateKanbanCardInfo(KanbanCardInfo cardInfo);
 }

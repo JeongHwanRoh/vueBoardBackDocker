@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vueboard.domains.kanban.dto.CreateCardDTO;
-import com.vueboard.domains.kanban.dto.CreatedKanbanCardDTO;
+import com.vueboard.domains.kanban.dto.CreateCardRequestDTO;
+import com.vueboard.domains.kanban.dto.CreateCardResponseDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
+import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.entity.KanbanCard;
+import com.vueboard.domains.kanban.entity.KanbanCardInfo;
 import com.vueboard.domains.kanban.mapper.KanbanCardMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,7 @@ public class KanbanCardService {
 	 * 4) TB_KANBAN_CARD_INFO insert
 	 */
 	@Transactional
-	public CreatedKanbanCardDTO createKanbanCard(String boardId, CreateCardDTO request) {
+	public CreateCardResponseDTO createKanbanCard(String boardId, CreateCardRequestDTO request) {
 
 		// 1) columnId 조회
 		long columnId = kanbanCardMapper.findColumnId(boardId, request.getColumnName());
@@ -58,6 +60,43 @@ public class KanbanCardService {
 			throw new IllegalArgumentException("failed to insert TB_KANBAN_CARD_INFO");
 		}
 
-		return new CreatedKanbanCardDTO(cardId, columnId, request.getTitle(), orderNum, request.getCardInfo());
+		return new CreateCardResponseDTO(cardId, columnId, request.getTitle(), orderNum, request.getCardInfo());
+	}
+	
+	@Transactional
+	public void updateKanbanCard(String boardId, UpdateKanbanCardDTO request) {
+		System.out.println("보드 ID: " + boardId);
+		System.out.println("서비스 요청: " + request);
+		
+		// 요청받은 COLUMN_NAME에 알맞는 COLUMN_ID 조회하면 됨 (BOARD_ID, COLUMN_NAME이 조건)=> 3월 19일 진행 예정
+		// 1) columnId 조회
+		long columnId = kanbanCardMapper.findColumnId(boardId, request.getColumnName());
+		System.out.println("조회된 columnId: " + columnId);
+		// 2) orderNum 계산 (동일한 column 내에서 orderNum이 변경될 수 있기 때문에, 현재 카드의 orderNum과 요청받은 orderNum이 다르면 orderNum 재계산)
+		long orderNum = kanbanCardMapper.nextOrderNum(columnId);
+		System.out.println("계산된 orderNum: " + orderNum);
+		
+		
+		KanbanCard card = new KanbanCard();
+		card.setCardId(request.getCardId());
+		card.setColumnId(columnId);
+		card.setTitle(request.getTitle());
+		card.setOrderNum(orderNum);
+		
+		System.out.println("업데이트할 카드 정보: " + card);
+		// 3) TB_KANBAN_CARD 업데이트
+		int cardUpdated = kanbanCardMapper.updateKanbanCard(card);
+		if (cardUpdated != 1) {
+			throw new IllegalArgumentException("TB_KANBAN_CARD 업데이트 실패");
+		}
+		// 4) TB_KANBAN_CARD_INFO 업데이트
+		KanbanCardInfo cardInfo = new KanbanCardInfo();
+		cardInfo.setCardId(request.getCardId());
+		cardInfo.setCardInfo(request.getCardInfo());
+		
+		int infoUpdated = kanbanCardMapper.updateKanbanCardInfo(cardInfo);
+		if (infoUpdated != 1) {
+			throw new IllegalArgumentException("TB_KANBAN_CARD_INFO 업데이트 실패");
+		}
 	}
 }

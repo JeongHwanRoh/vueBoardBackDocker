@@ -8,6 +8,7 @@
 	<select id="findByBoardId" parameterType="java.lang.String"
 		resultType="com.vueboard.domains.kanban.dto.KanbanColumnDTO">
 		SELECT
+		A.COLUMN_ID AS columnId,
 		A.COLUMN_NAME AS columnName,
 		B.ORDER_NUM AS orderNum,
 		C.CARD_ID AS cardId,
@@ -38,12 +39,12 @@
 	</select>
 
 	<!-- 2단계: orderNum 계산 (없으면 0부터 시작) -->
-	<select id="nextOrderNum" parameterType="long"
-		resultType="long">
+	<select id="nextOrderNum" parameterType="long" resultType="long">
 		SELECT NVL(MAX(ORDER_NUM), -1) + 1
 		FROM TB_KANBAN_CARD
 		WHERE
-		COLUMN_ID = #{columnId}
+		COLUMN_ID =
+		#{columnId}
 	</select>
 
 	<!-- 3단계: 시퀀스에서 cardId 가져오기 -->
@@ -76,4 +77,31 @@
 		#{cardInfo}
 		)
 	</insert>
+
+	<!-- COLUMN_ID 존재 여부 검증 -->
+	<select id="existsColumnId" resultType="int">
+		SELECT COUNT(1) FROM TB_KANBAN_COLUMN WHERE COLUMN_ID = #{columnId}
+	</select>
+
+	<!-- TB_KANBAN_CARD UPDATE -->
+	<update id="updateKanbanCard"
+		parameterType="com.vueboard.domains.kanban.entity.KanbanCard">
+		UPDATE TB_KANBAN_CARD
+		SET
+		COLUMN_ID = #{columnId},
+		TITLE = #{title},
+		ORDER_NUM = #{orderNum},
+		UPDATED_AT = SYSDATE
+		WHERE CARD_ID = #{cardId}
+	</update>
+
+	<!-- TB_KANBAN_CARD_INFO UPDATE -->
+	<update id="updateKanbanCardInfo"
+		parameterType="com.vueboard.domains.kanban.entity.KanbanCardInfo">
+		UPDATE TB_KANBAN_CARD_INFO
+		SET CARD_INFO = #{cardInfo}
+		WHERE CARD_ID = #{cardId}
+	</update>
+
+
 </mapper>

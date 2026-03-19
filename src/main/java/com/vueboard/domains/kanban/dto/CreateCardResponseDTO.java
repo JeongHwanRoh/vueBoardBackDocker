@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UpdatedKanbanCardDTO {
+public class CreateCardResponseDTO {
 	private long cardId;
 	private long columnId;
 	private String title;

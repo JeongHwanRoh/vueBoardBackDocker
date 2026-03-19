@@ -5,15 +5,17 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vueboard.domains.kanban.dto.CreateCardDTO;
-import com.vueboard.domains.kanban.dto.CreatedKanbanCardDTO;
+import com.vueboard.domains.kanban.dto.CreateCardRequestDTO;
+import com.vueboard.domains.kanban.dto.CreateCardResponseDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
+import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.service.KanbanCardService;
 
 import lombok.RequiredArgsConstructor;
@@ -39,12 +41,12 @@ public class KanbanCardController {
 	// 칸반보드 Card 생성
 	// 예: /kanban/card/create?boardId=...
 	@PostMapping("/create")
-	public ResponseEntity<CreatedKanbanCardDTO> createKanbanCard(
+	public ResponseEntity<CreateCardResponseDTO> createKanbanCard(
 			@RequestParam(required = false) String boardId,
-			@RequestBody CreateCardDTO request) {
-		System.out.println("dto값: " + request);
+			@RequestBody CreateCardRequestDTO request) {
+		System.out.println("dto: " + request);
 		try {
-			CreatedKanbanCardDTO created = kanbanCardService.createKanbanCard(boardId, request);
+			CreateCardResponseDTO created = kanbanCardService.createKanbanCard(boardId, request);
 			return ResponseEntity.status(HttpStatus.CREATED).body(created);
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().build();
@@ -52,7 +54,19 @@ public class KanbanCardController {
 	}
 	
 	// 칸반보드 Card 수정
-//	@PostMapping("/update")
-//	public ResponseEntity
+	// PatchMapping 사용 (부분 업데이트, Spring Security의 CORS Preflight 요청 허용)
+	@PatchMapping("/update")
+	public ResponseEntity<Void> updateKanbanCard(
+			@RequestBody UpdateKanbanCardDTO request,
+			@RequestParam(required = false) String boardId) {
+		System.out.println("dto 요청: " + request);
+		try {
+			kanbanCardService.updateKanbanCard(boardId, request);
+			return ResponseEntity.ok().build();
+		} catch (IllegalArgumentException e) {
+			System.out.println("update 실패 원인: " + e.getMessage());
+			return ResponseEntity.badRequest().build();
+		}
+	}
 
 }
