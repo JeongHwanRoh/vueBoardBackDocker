@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.vueboard.domains.kanban.dto.CreateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.entity.KanbanCard;
@@ -36,4 +37,6 @@ public interface KanbanCardMapper {
 	int deleteKanbanCard(long cardId);
 
 	int reorderKanbanCard(@Param("card") KanbanCard kanbanCard);
+
+	int insertKanbanCardSchedule(CreateCardScheduleRequestDTO request);
 }

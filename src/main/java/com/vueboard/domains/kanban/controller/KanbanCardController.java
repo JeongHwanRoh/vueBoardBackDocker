@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vueboard.domains.kanban.dto.CreateCardRequestDTO;
 import com.vueboard.domains.kanban.dto.CreateCardResponseDTO;
+import com.vueboard.domains.kanban.dto.CreateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
 import com.vueboard.domains.kanban.dto.ReorderCardDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
@@ -37,6 +38,7 @@ public class KanbanCardController {
 			return ResponseEntity.badRequest().build();
 		}
 		List<KanbanColumnDTO> kanbanCards = kanbanCardService.getKanbanCardsByBoardId(boardId);
+		
 		return ResponseEntity.ok(kanbanCards);
 	}
 
@@ -51,6 +53,20 @@ public class KanbanCardController {
 			CreateCardResponseDTO created = kanbanCardService.createKanbanCard(boardId, request);
 			return ResponseEntity.status(HttpStatus.CREATED).body(created);
 		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	// 칸반보드 Card 일정 추가
+	@PatchMapping("/schedule")
+	public ResponseEntity<Void> addScheduleToKanbanCard(
+			@RequestBody CreateCardScheduleRequestDTO request) {
+		System.out.println("일정 추가 요청: " + request);
+		try {
+			kanbanCardService.addScheduleToKanbanCard(request);
+			return ResponseEntity.ok().build();
+		} catch (IllegalArgumentException e) {
+			System.out.println("일정 추가 실패 원인: " + e.getMessage());
 			return ResponseEntity.badRequest().build();
 		}
 	}

@@ -1,5 +1,6 @@
 package com.vueboard.domains.kanban.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +18,8 @@ public class KanbanColumnDTO {
     private Long cardId;
     private String title;
     private String cardInfo;
+    private LocalDate predictedStartDate;
+    private LocalDate predictedEndDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

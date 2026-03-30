@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.vueboard.domains.kanban.dto.CreateCardRequestDTO;
 import com.vueboard.domains.kanban.dto.CreateCardResponseDTO;
+import com.vueboard.domains.kanban.dto.CreateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
 import com.vueboard.domains.kanban.dto.ReorderCardDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
@@ -22,13 +23,14 @@ public class KanbanCardService {
 	private final KanbanCardMapper kanbanCardMapper;
 
 	public List<KanbanColumnDTO> getKanbanCardsByBoardId(String boardId) {
+		// TB_KANBAN_CARD, TB_KANBAN_CARD_INFO, TB_KANBAN_COLUMN, TB_KANBAN_CARD_SCHEDULE을 조인해서 조회
 		return kanbanCardMapper.findByBoardId(boardId);
 	}
 
-	/**
-	 * 카드 생성 로직 1) columnId 조회 (boardId + columnName) 2) orderNum 계산 (없으면 0부터) 3)
-	 * cardId 시퀀스 조회 후 TB_KANBAN_CARD insert 4) TB_KANBAN_CARD_INFO insert
-	 */
+
+	 // 카드 생성 로직 1) columnId 조회 (boardId + columnName) 2) orderNum 계산 (없으면 0부터) 3)
+	 // cardId 시퀀스 조회 후 TB_KANBAN_CARD insert 4) TB_KANBAN_CARD_INFO insert
+
 	@Transactional
 	public CreateCardResponseDTO createKanbanCard(String boardId, CreateCardRequestDTO request) {
 
@@ -59,14 +61,29 @@ public class KanbanCardService {
 
 		return new CreateCardResponseDTO(cardId, columnId, request.getTitle(), orderNum, request.getCardInfo());
 	}
+	
+	// 카드 일정 추가 로직
+	public void addScheduleToKanbanCard(CreateCardScheduleRequestDTO request) {
+	
 
+		int updated = kanbanCardMapper.insertKanbanCardSchedule(request);
+		if (updated != 1) {
+			throw new IllegalArgumentException("카드 일정 추가 실패");
+		}
+		
+	}
+	
+	
+	// 카드 수정 로직 
+	//	1) columnId 조회 (boardId + columnName) 
+	//	2) orderNum 계산 (동일한 column 내에서 orderNum이 변경될 수 있기 때문에, 현재 카드의 orderNum과 요청받은 orderNum이 다르면 orderNum 재계산)
+	//	3) TB_KANBAN_CARD 업데이트
+	//	4) TB_KANBAN_CARD_INFO 업데이트
 	@Transactional
 	public void updateKanbanCard(String boardId, UpdateKanbanCardDTO request) {
 		System.out.println("보드 ID: " + boardId);
 		System.out.println("서비스 요청: " + request);
 
-		// 요청받은 COLUMN_NAME에 알맞는 COLUMN_ID 조회하면 됨 (BOARD_ID, COLUMN_NAME이 조건)=> 3월 19일
-		// 진행 예정
 		// 1) columnId 조회
 		long columnId = kanbanCardMapper.findColumnId(boardId, request.getColumnName());
 		System.out.println("조회된 columnId: " + columnId);
@@ -129,5 +146,7 @@ public class KanbanCardService {
 		return deletedCard;
 
 	}
+	
+
 
 }
