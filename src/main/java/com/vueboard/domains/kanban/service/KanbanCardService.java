@@ -9,6 +9,7 @@ import com.vueboard.domains.kanban.dto.CreateCardResponseDTO;
 import com.vueboard.domains.kanban.dto.CreateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
 import com.vueboard.domains.kanban.dto.ReorderCardDTO;
+import com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.entity.KanbanCard;
 import com.vueboard.domains.kanban.entity.KanbanCardInfo;
@@ -114,6 +115,16 @@ public class KanbanCardService {
 			throw new IllegalArgumentException("TB_KANBAN_CARD_INFO 업데이트 실패");
 		}
 	}
+	
+
+	// 카드 일정 수정 로직
+	public void updateKanbanCardSchedule(UpdateCardScheduleRequestDTO request) {
+		int updated = kanbanCardMapper.updateKanbanCardSchedule(request);
+		if (updated != 1) {
+			throw new IllegalArgumentException("카드 일정 수정 실패");
+		}
+		
+	}
 
 	// 카드 드래그앤드롭 로직
 	@Transactional
@@ -146,6 +157,7 @@ public class KanbanCardService {
 		return deletedCard;
 
 	}
+
 	
 
 

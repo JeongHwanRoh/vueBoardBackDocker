@@ -10,7 +10,8 @@
 		SELECT A.COLUMN_ID AS columnId, A.COLUMN_NAME AS
 		columnName, B.ORDER_NUM AS orderNum, C.CARD_ID AS cardId, B.TITLE AS
 		title, C.CARD_INFO AS cardInfo, B.CREATED_AT AS createdAt,
-		B.UPDATED_AT AS updatedAt, D.PREDICTED_START_DATE AS predictedStartDate, D.PREDICTED_END_DATE AS predictedEndDate
+		B.UPDATED_AT AS updatedAt, D.PREDICTED_START_DATE AS
+		predictedStartDate, D.PREDICTED_END_DATE AS predictedEndDate
 		FROM
 		TB_KANBAN_COLUMN A
 		JOIN TB_KANBAN_CARD B
@@ -18,8 +19,8 @@
 		JOIN TB_KANBAN_CARD_INFO C
 		ON B.CARD_ID =
 		C.CARD_ID
-		JOIN TB_KANBAN_CARD_SCHEDULE D
-        ON B.CARD_ID = D.CARD_ID
+		JOIN
+		TB_KANBAN_CARD_SCHEDULE D ON B.CARD_ID = D.CARD_ID
 		WHERE A.BOARD_ID =
 		#{boardId}
 		ORDER BY A.COLUMN_ID ASC,
@@ -77,6 +78,8 @@
 		)
 	</insert>
 
+
+
 	<!-- COLUMN_ID 존재 여부 검증 -->
 	<select id="existsColumnId" resultType="int">
 		SELECT COUNT(1) FROM
@@ -112,6 +115,16 @@
 		#{predictedEndDate}
 		)
 	</insert>
+
+	<!-- TB_KANBAN_CARD_SCHEDULE UPDATE -->
+	<update id="updateKanbanCardSchedule" parameterType="com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO"> 
+	UPDATE TB_KANBAN_CARD_SCHEDULE 
+	SET PREDICTED_START_DATE = #{predictedStartDate},
+        PREDICTED_END_DATE = #{predictedEndDate}
+    WHERE CARD_ID = #{cardId}
+
+
+	</update>
 	<!-- TB_KANBAN_CARD REORDER (단건 업데이트) -->
 	<update id="reorderKanbanCard"
 		parameterType="com.vueboard.domains.kanban.entity.KanbanCard">
@@ -120,7 +133,8 @@
 		COLUMN_ID = #{card.columnId},
 		ORDER_NUM = #{card.orderNum},
 		UPDATED_AT = SYSDATE
-		WHERE CARD_ID = #{card.cardId}
+		WHERE CARD_ID =
+		#{card.cardId}
 	</update>
 
 	<!-- TB_KANBAN_CARD_INFO DELETE -->

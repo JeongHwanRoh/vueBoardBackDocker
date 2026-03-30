@@ -18,6 +18,7 @@ import com.vueboard.domains.kanban.dto.CreateCardResponseDTO;
 import com.vueboard.domains.kanban.dto.CreateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
 import com.vueboard.domains.kanban.dto.ReorderCardDTO;
+import com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.service.KanbanCardService;
 
@@ -83,6 +84,20 @@ public class KanbanCardController {
 			return ResponseEntity.ok().build();
 		} catch (IllegalArgumentException e) {
 			System.out.println("update 실패 원인: " + e.getMessage());
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	// 칸반보드 Schedule 수정
+	@PatchMapping("/schedule/update")
+	public ResponseEntity<Void> updateKanbanCardSchedule(
+			@RequestBody UpdateCardScheduleRequestDTO request) {
+		System.out.println("일정 수정 요청: " + request);
+		try {
+			kanbanCardService.updateKanbanCardSchedule(request);
+			return ResponseEntity.ok().build();
+		} catch (IllegalArgumentException e) {
+			System.out.println("일정 수정 실패 원인: " + e.getMessage());
 			return ResponseEntity.badRequest().build();
 		}
 	}
