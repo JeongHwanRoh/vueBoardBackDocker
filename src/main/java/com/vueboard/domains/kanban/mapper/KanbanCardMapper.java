@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.vueboard.domains.kanban.dto.CreateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
+import com.vueboard.domains.kanban.dto.KanbanScheduleDTO;
 import com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.entity.KanbanCard;
@@ -42,4 +43,6 @@ public interface KanbanCardMapper {
 	int insertKanbanCardSchedule(CreateCardScheduleRequestDTO request);
 
 	int updateKanbanCardSchedule(UpdateCardScheduleRequestDTO request);
+
+	List<KanbanScheduleDTO> findSchedulesByBoardId(String boardId);
 }

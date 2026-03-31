@@ -13,4 +13,5 @@ public class CreateCardResponseDTO {
 	private String title;
 	private long orderNum;
 	private String cardInfo;
+	private String classification;
 }

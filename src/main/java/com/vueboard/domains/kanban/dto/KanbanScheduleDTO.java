@@ -7,11 +7,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UpdateKanbanCardDTO {
+public class KanbanScheduleDTO {	
 	private long cardId;
-	private String columnName;
 	private String title;
-	private long orderNum;
-	private String cardInfo;
 	private String classification;
+	private String cardInfo;
+	private String predictedStartDate;
+	private String predictedEndDate;
+	private String actualStartDate;
+	private String actualEndDate;
+	private String status;
+
 }

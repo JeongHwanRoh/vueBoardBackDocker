@@ -18,6 +18,7 @@ public class KanbanColumnDTO {
     private Long cardId;
     private String title;
     private String cardInfo;
+    private String classification;
     private LocalDate predictedStartDate;
     private LocalDate predictedEndDate;
     private LocalDateTime createdAt;

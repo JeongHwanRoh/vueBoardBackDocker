@@ -12,4 +12,5 @@ public class CreateCardRequestDTO {
     private String cardInfo;
     private String columnName;
     private Integer orderNum;
+    private String classification;
 }

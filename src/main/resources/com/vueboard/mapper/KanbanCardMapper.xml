@@ -9,22 +9,54 @@
 		resultType="com.vueboard.domains.kanban.dto.KanbanColumnDTO">
 		SELECT A.COLUMN_ID AS columnId, A.COLUMN_NAME AS
 		columnName, B.ORDER_NUM AS orderNum, C.CARD_ID AS cardId, B.TITLE AS
-		title, C.CARD_INFO AS cardInfo, B.CREATED_AT AS createdAt,
-		B.UPDATED_AT AS updatedAt, D.PREDICTED_START_DATE AS
-		predictedStartDate, D.PREDICTED_END_DATE AS predictedEndDate
+		title, C.CARD_INFO AS cardInfo, B.CLASSIFICATION AS classification,
+		B.CREATED_AT AS createdAt,
+		B.UPDATED_AT AS updatedAt,
+		D.PREDICTED_START_DATE AS
+		predictedStartDate, D.PREDICTED_END_DATE AS
+		predictedEndDate
 		FROM
 		TB_KANBAN_COLUMN A
 		JOIN TB_KANBAN_CARD B
-		ON A.COLUMN_ID = B.COLUMN_ID
+		ON
+		A.COLUMN_ID = B.COLUMN_ID
 		JOIN TB_KANBAN_CARD_INFO C
 		ON B.CARD_ID =
 		C.CARD_ID
 		JOIN
 		TB_KANBAN_CARD_SCHEDULE D ON B.CARD_ID = D.CARD_ID
-		WHERE A.BOARD_ID =
+		WHERE
+		A.BOARD_ID =
 		#{boardId}
 		ORDER BY A.COLUMN_ID ASC,
-		B.ORDER_NUM ASC, B.CARD_ID ASC
+		B.ORDER_NUM ASC,
+		B.CARD_ID ASC
+	</select>
+
+	<!-- 카드 일정 조회 로직 -->
+	<select id="findSchedulesByBoardId"
+		parameterType="java.lang.String"
+		resultType="com.vueboard.domains.kanban.dto.KanbanScheduleDTO"> SELECT
+		B.CARD_ID AS cardId,
+		B.TITLE AS title,
+		B.CLASSIFICATION AS classification,
+		C.CARD_INFO AS cardInfo,
+		D.PREDICTED_START_DATE AS predictedStartDate,
+		D.PREDICTED_END_DATE AS predictedEndDate,
+		D.ACTUAL_START_DATE AS actualStartDate,
+		D.ACTUAL_END_DATE AS actualEndDate,
+		CASE
+		WHEN A.COLUMN_NAME = 'IN_PROGRESS' THEN '진행중'
+		WHEN A.COLUMN_NAME = 'DONE' THEN '완료'
+		ELSE '예정'
+		END AS status
+		FROM TB_KANBAN_COLUMN A
+		JOIN TB_KANBAN_CARD B ON A.COLUMN_ID = B.COLUMN_ID
+		JOIN TB_KANBAN_CARD_INFO C ON B.CARD_ID = C.CARD_ID
+		JOIN TB_KANBAN_CARD_SCHEDULE D ON B.CARD_ID = D.CARD_ID
+		WHERE A.BOARD_ID = #{boardId}
+		ORDER BY B.CARD_ID ASC, B.CLASSIFICATION ASC
+
 	</select>
 
 	<!--Card insert -->
@@ -58,11 +90,12 @@
 	<insert id="insertKanbanCard"
 		parameterType="com.vueboard.domains.kanban.entity.KanbanCard">
 		INSERT INTO TB_KANBAN_CARD(CARD_ID, COLUMN_ID, TITLE,
-		ORDER_NUM, CREATED_AT, UPDATED_AT)
+		CLASSIFICATION, ORDER_NUM, CREATED_AT, UPDATED_AT)
 		VALUES(
 		#{cardId},
 		#{columnId},
 		#{title},
+		#{classification},
 		#{orderNum},
 		SYSDATE,
 		SYSDATE
@@ -94,6 +127,7 @@
 		COLUMN_ID = #{columnId},
 		TITLE =
 		#{title},
+		CLASSIFICATION = #{classification},
 		ORDER_NUM = #{orderNum},
 		UPDATED_AT = SYSDATE
 		WHERE CARD_ID =
@@ -117,11 +151,11 @@
 	</insert>
 
 	<!-- TB_KANBAN_CARD_SCHEDULE UPDATE -->
-	<update id="updateKanbanCardSchedule" parameterType="com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO"> 
-	UPDATE TB_KANBAN_CARD_SCHEDULE 
-	SET PREDICTED_START_DATE = #{predictedStartDate},
-        PREDICTED_END_DATE = #{predictedEndDate}
-    WHERE CARD_ID = #{cardId}
+	<update id="updateKanbanCardSchedule"
+		parameterType="com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO">
+		UPDATE TB_KANBAN_CARD_SCHEDULE
+		SET PREDICTED_START_DATE = #{predictedStartDate}, PREDICTED_END_DATE =
+		#{predictedEndDate} WHERE CARD_ID = #{cardId}
 
 
 	</update>

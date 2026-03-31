@@ -17,6 +17,7 @@ import com.vueboard.domains.kanban.dto.CreateCardRequestDTO;
 import com.vueboard.domains.kanban.dto.CreateCardResponseDTO;
 import com.vueboard.domains.kanban.dto.CreateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
+import com.vueboard.domains.kanban.dto.KanbanScheduleDTO;
 import com.vueboard.domains.kanban.dto.ReorderCardDTO;
 import com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
@@ -42,7 +43,17 @@ public class KanbanCardController {
 		
 		return ResponseEntity.ok(kanbanCards);
 	}
-
+	
+	// 칸반보드 Card 스케줄 조회
+	@GetMapping("/schedule/list")
+	public ResponseEntity<List<KanbanScheduleDTO>> getKanbanCardScheduleByQuery(@RequestParam(required = false) String boardId) {
+		if (boardId == null || boardId.isBlank()) {
+			return ResponseEntity.badRequest().build();
+		}
+		List<KanbanScheduleDTO> schedules = kanbanCardService.getKanbanCardSchedulesByBoardId(boardId);
+		System.out.println("스케줄 조회 결과: " + schedules);
+		return ResponseEntity.ok(schedules);
+	}
 	// 칸반보드 Card 생성
 	// 예: /kanban/card/create?boardId=...
 	@PostMapping("/create")

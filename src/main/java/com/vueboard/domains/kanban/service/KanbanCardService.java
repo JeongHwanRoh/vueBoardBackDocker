@@ -8,6 +8,7 @@ import com.vueboard.domains.kanban.dto.CreateCardRequestDTO;
 import com.vueboard.domains.kanban.dto.CreateCardResponseDTO;
 import com.vueboard.domains.kanban.dto.CreateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
+import com.vueboard.domains.kanban.dto.KanbanScheduleDTO;
 import com.vueboard.domains.kanban.dto.ReorderCardDTO;
 import com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
@@ -47,6 +48,7 @@ public class KanbanCardService {
 		card.setCardId(cardId);
 		card.setColumnId(columnId);
 		card.setTitle(request.getTitle());
+		card.setClassification(request.getClassification());
 		card.setOrderNum(orderNum);
 
 		int insertedCard = kanbanCardMapper.insertKanbanCard(card);
@@ -60,7 +62,7 @@ public class KanbanCardService {
 			throw new IllegalArgumentException("failed to insert TB_KANBAN_CARD_INFO");
 		}
 
-		return new CreateCardResponseDTO(cardId, columnId, request.getTitle(), orderNum, request.getCardInfo());
+		return new CreateCardResponseDTO(cardId, columnId, request.getTitle(), orderNum, request.getCardInfo(), request.getClassification());
 	}
 	
 	// 카드 일정 추가 로직
@@ -74,6 +76,12 @@ public class KanbanCardService {
 		
 	}
 	
+	// 카드 일정 조회 로직
+	public List<KanbanScheduleDTO> getKanbanCardSchedulesByBoardId(String boardId) {
+		
+		return kanbanCardMapper.findSchedulesByBoardId(boardId);
+	}
+
 	
 	// 카드 수정 로직 
 	//	1) columnId 조회 (boardId + columnName) 
@@ -97,6 +105,7 @@ public class KanbanCardService {
 		card.setCardId(request.getCardId());
 		card.setColumnId(columnId);
 		card.setTitle(request.getTitle());
+		card.setClassification(request.getClassification());
 		card.setOrderNum(orderNum);
 
 		System.out.println("업데이트할 카드 정보: " + card);
@@ -157,6 +166,8 @@ public class KanbanCardService {
 		return deletedCard;
 
 	}
+
+
 
 	
 
