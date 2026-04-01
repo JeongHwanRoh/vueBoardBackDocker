@@ -20,6 +20,7 @@ import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
 import com.vueboard.domains.kanban.dto.KanbanScheduleDTO;
 import com.vueboard.domains.kanban.dto.ReorderCardDTO;
 import com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO;
+import com.vueboard.domains.kanban.dto.UpdateCardScheduleStatusDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.service.KanbanCardService;
 
@@ -99,7 +100,7 @@ public class KanbanCardController {
 		}
 	}
 	
-	// 칸반보드 Schedule 수정
+	// 칸반보드 Schedule 수정(상세페이지에서)
 	@PatchMapping("/schedule/update")
 	public ResponseEntity<Void> updateKanbanCardSchedule(
 			@RequestBody UpdateCardScheduleRequestDTO request) {
@@ -113,6 +114,19 @@ public class KanbanCardController {
 		}
 	}
 	
+	// 칸반보드 Schedule 수정(일정 상태관리 페이지에서)
+	@PatchMapping("/schedule/status/update")
+	public ResponseEntity<Void> updateKanbanCardScheduleStatus(
+			@RequestBody UpdateCardScheduleStatusDTO request) {
+		System.out.println("일정 상태 수정 요청: " + request);
+		try {
+			kanbanCardService.updateKanbanCardScheduleStatus(request);
+			return ResponseEntity.ok().build();
+		} catch (IllegalArgumentException e) {
+			System.out.println("일정 상태 수정 실패 원인: " + e.getMessage());
+			return ResponseEntity.badRequest().build();
+		}
+	}
 	// 칸반보드 Card 드래그앤드롭
 	@PatchMapping("/reorder")
 	public ResponseEntity<Void> reorderKanbanCard(

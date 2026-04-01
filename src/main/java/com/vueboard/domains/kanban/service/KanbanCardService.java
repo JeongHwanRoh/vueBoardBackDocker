@@ -11,6 +11,7 @@ import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
 import com.vueboard.domains.kanban.dto.KanbanScheduleDTO;
 import com.vueboard.domains.kanban.dto.ReorderCardDTO;
 import com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO;
+import com.vueboard.domains.kanban.dto.UpdateCardScheduleStatusDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.entity.KanbanCard;
 import com.vueboard.domains.kanban.entity.KanbanCardInfo;
@@ -165,6 +166,16 @@ public class KanbanCardService {
 
 		return deletedCard;
 
+	}
+
+	@Transactional
+	public void updateKanbanCardScheduleStatus(UpdateCardScheduleStatusDTO request) {
+		// 1. actualStartDate, actualEndDate 변경
+		
+		// 2. status명을 한글->영어로 변경(DB에 저장된 columnName 명칭에 맞게)
+		// 예정: TODO  진행중: IN_PROGRESS 완료: DONE
+		
+		// 3. actualStartDate, actualEndDate 입력 조건에 따라 status(COLUMN_NAME) 변경하기
 	}
 
 
