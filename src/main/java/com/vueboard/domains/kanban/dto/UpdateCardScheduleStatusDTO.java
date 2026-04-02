@@ -1,4 +1,6 @@
 package com.vueboard.domains.kanban.dto;
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class UpdateCardScheduleStatusDTO {
 	private long cardId;
-	private String actualStartDate;
-	private String actualEndDate;
+	private LocalDate actualStartDate;
+	private LocalDate actualEndDate;
 	private String status;
 
 }

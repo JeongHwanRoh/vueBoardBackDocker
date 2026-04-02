@@ -9,6 +9,7 @@ import com.vueboard.domains.kanban.dto.CreateCardScheduleRequestDTO;
 import com.vueboard.domains.kanban.dto.KanbanColumnDTO;
 import com.vueboard.domains.kanban.dto.KanbanScheduleDTO;
 import com.vueboard.domains.kanban.dto.UpdateCardScheduleRequestDTO;
+import com.vueboard.domains.kanban.dto.UpdateCardScheduleStatusDTO;
 import com.vueboard.domains.kanban.dto.UpdateKanbanCardDTO;
 import com.vueboard.domains.kanban.entity.KanbanCard;
 import com.vueboard.domains.kanban.entity.KanbanCardInfo;
@@ -43,6 +44,10 @@ public interface KanbanCardMapper {
 	int insertKanbanCardSchedule(CreateCardScheduleRequestDTO request);
 
 	int updateKanbanCardSchedule(UpdateCardScheduleRequestDTO request);
+
+	int updateKanbanCardActualDate(UpdateCardScheduleStatusDTO request);
+
+	int updateKanbanCardStatus(@Param("cardId") long cardId, @Param("columnId") long columnId);
 
 	List<KanbanScheduleDTO> findSchedulesByBoardId(String boardId);
 }

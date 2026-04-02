@@ -135,7 +135,44 @@ public class KanbanCardService {
 		}
 		
 	}
+	
+	// 카드 일정 상태 수정 로직 (전체 리스트 일괄 저장)
+	@Transactional
+	public void updateKanbanCardScheduleStatus(String boardId, List<UpdateCardScheduleStatusDTO> schedules) {
 
+		for (UpdateCardScheduleStatusDTO request : schedules) {
+
+			// 1. TB_KANBAN_CARD_SCHEDULE의 actualStartDate, actualEndDate 변경
+			int updateDate = kanbanCardMapper.updateKanbanCardActualDate(request);
+			if (updateDate != 1) {
+				throw new IllegalArgumentException("카드 일정 날짜 수정 실패 - cardId: " + request.getCardId());
+			}
+
+			// 2. actualStartDate/actualEndDate 입력 조건에 따라 status(columnName) 결정
+			//    - actualEndDate 있음  → DONE
+			//    - actualStartDate 있음 → IN_PROGRESS
+			//    - 둘 다 없음          → TODO
+			String statusColumnName;
+			if (request.getActualEndDate() != null) {
+				statusColumnName = "DONE";
+			} else if (request.getActualStartDate() != null) {
+				statusColumnName = "IN_PROGRESS";
+			} else {
+				statusColumnName = "TODO";
+			}
+
+			// 3. status에 해당하는 columnId 조회
+			long columnId = kanbanCardMapper.findColumnId(boardId, statusColumnName);
+			System.out.println("cardId: " + request.getCardId() + " → status: " + statusColumnName + ", columnId: " + columnId);
+
+			// 4. TB_KANBAN_CARD의 COLUMN_ID 변경
+			int updateStatus = kanbanCardMapper.updateKanbanCardStatus(request.getCardId(), columnId);
+			if (updateStatus != 1) {
+				throw new IllegalArgumentException("카드 상태(컬럼) 수정 실패 - cardId: " + request.getCardId());
+			}
+		}
+	}
+	
 	// 카드 드래그앤드롭 로직
 	@Transactional
 	public void reorderKanbanCard(String boardId, List<ReorderCardDTO> cards) {
@@ -167,16 +204,8 @@ public class KanbanCardService {
 		return deletedCard;
 
 	}
+	
 
-	@Transactional
-	public void updateKanbanCardScheduleStatus(UpdateCardScheduleStatusDTO request) {
-		// 1. actualStartDate, actualEndDate 변경
-		
-		// 2. status명을 한글->영어로 변경(DB에 저장된 columnName 명칭에 맞게)
-		// 예정: TODO  진행중: IN_PROGRESS 완료: DONE
-		
-		// 3. actualStartDate, actualEndDate 입력 조건에 따라 status(COLUMN_NAME) 변경하기
-	}
 
 
 

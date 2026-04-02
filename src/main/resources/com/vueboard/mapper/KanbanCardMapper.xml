@@ -46,9 +46,9 @@
 		D.ACTUAL_START_DATE AS actualStartDate,
 		D.ACTUAL_END_DATE AS actualEndDate,
 		CASE
-		WHEN A.COLUMN_NAME = 'IN_PROGRESS' THEN '진행중'
-		WHEN A.COLUMN_NAME = 'DONE' THEN '완료'
-		ELSE '예정'
+		WHEN A.COLUMN_NAME = 'IN_PROGRESS' THEN 'IN_PROGRESS'
+		WHEN A.COLUMN_NAME = 'DONE' THEN 'DONE'
+		ELSE 'TODO'
 		END AS status
 		FROM TB_KANBAN_COLUMN A
 		JOIN TB_KANBAN_CARD B ON A.COLUMN_ID = B.COLUMN_ID
@@ -159,6 +159,24 @@
 
 
 	</update>
+	
+	<!-- TB_KANBAN_CARD_SCHEDULE UPDATE (actualDate) -->
+	<update id="updateKanbanCardActualDate"
+		parameterType="com.vueboard.domains.kanban.dto.UpdateCardScheduleStatusDTO">
+		UPDATE TB_KANBAN_CARD_SCHEDULE
+		SET ACTUAL_START_DATE = #{actualStartDate},
+		    ACTUAL_END_DATE   = #{actualEndDate}
+		WHERE CARD_ID = #{cardId}
+	</update>
+
+	<!-- TB_KANBAN_CARD UPDATE (status → columnId 변경) -->
+	<update id="updateKanbanCardStatus">
+		UPDATE TB_KANBAN_CARD
+		SET COLUMN_ID  = #{columnId},
+		    UPDATED_AT = SYSDATE
+		WHERE CARD_ID = #{cardId}
+	</update>
+
 	<!-- TB_KANBAN_CARD REORDER (단건 업데이트) -->
 	<update id="reorderKanbanCard"
 		parameterType="com.vueboard.domains.kanban.entity.KanbanCard">
