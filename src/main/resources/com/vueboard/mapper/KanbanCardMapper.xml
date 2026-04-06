@@ -160,12 +160,15 @@
 
 	</update>
 	
-	<!-- TB_KANBAN_CARD_SCHEDULE UPDATE (actualDate) -->
+	<!-- TB_KANBAN_CARD_SCHEDULE UPDATE-->
 	<update id="updateKanbanCardActualDate"
 		parameterType="com.vueboard.domains.kanban.dto.UpdateCardScheduleStatusDTO">
 		UPDATE TB_KANBAN_CARD_SCHEDULE
-		SET ACTUAL_START_DATE = #{actualStartDate},
-		    ACTUAL_END_DATE   = #{actualEndDate}
+		SET
+		PREDICTED_START_DATE=#{predictedStartDate},
+		PREDICTED_END_DATE=#{predictedEndDate}, 
+		ACTUAL_START_DATE = #{actualStartDate},
+		ACTUAL_END_DATE   = #{actualEndDate}
 		WHERE CARD_ID = #{cardId}
 	</update>
 
