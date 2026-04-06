@@ -172,6 +172,7 @@
 		WHERE CARD_ID = #{cardId}
 	</update>
 
+
 	<!-- TB_KANBAN_CARD UPDATE (status → columnId 변경) -->
 	<update id="updateKanbanCardStatus">
 		UPDATE TB_KANBAN_CARD
