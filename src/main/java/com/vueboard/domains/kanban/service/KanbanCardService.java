@@ -63,7 +63,17 @@ public class KanbanCardService {
 			throw new IllegalArgumentException("failed to insert TB_KANBAN_CARD_INFO");
 		}
 
-		return new CreateCardResponseDTO(cardId, columnId, request.getTitle(), orderNum, request.getCardInfo(), request.getClassification());
+		// 5) 응답 dto 반환(빌더 패턴 사용)
+		// 빌더 패턴 사용 이유: 생성자나 setter로 객체를 생성할 때보다 가독성이 좋고, 필드가 많아질수록 유용함. 
+		// 특히, 응답 dto는 반환해야 하는 필드가 많을 수 있기 때문에 빌더 패턴이 적합하다고 판단됨.
+		return CreateCardResponseDTO.builder()
+				.cardId(cardId)
+				.columnId(columnId)
+				.title(request.getTitle())
+				.orderNum(orderNum)
+				.cardInfo(request.getCardInfo())
+				.classification(request.getClassification())
+				.build();
 	}
 	
 	// 카드 일정 추가 로직

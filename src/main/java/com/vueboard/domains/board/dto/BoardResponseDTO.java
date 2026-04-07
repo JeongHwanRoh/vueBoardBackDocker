@@ -4,13 +4,11 @@ import java.time.LocalDateTime;
 
 import com.vueboard.domains.board.entity.Board;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Builder
+@Getter
 public class BoardResponseDTO {
 
 	private long boardId;
@@ -22,15 +20,17 @@ public class BoardResponseDTO {
 	private int viewcnt;
 	private String category;
 
-	public BoardResponseDTO(Board board) {
-		this.boardId = board.getBoardId();
-		this.title = board.getTitle();
-		this.content = board.getContent();
-		this.pn = board.getPn();
-		this.writer = board.getWriter();
-		this.regdate = board.getRegdate();
-		this.viewcnt = board.getViewcnt();
-		this.category = board.getCategory();
+	public static BoardResponseDTO from(Board board) {
+		return BoardResponseDTO.builder()
+				.boardId(board.getBoardId())
+				.title(board.getTitle())
+				.content(board.getContent())
+				.pn(board.getPn())
+				.writer(board.getWriter())
+				.regdate(board.getRegdate())
+				.viewcnt(board.getViewcnt())
+				.category(board.getCategory())
+				.build();
 	}
 
 }

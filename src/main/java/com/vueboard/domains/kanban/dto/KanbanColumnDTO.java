@@ -2,10 +2,10 @@ package com.vueboard.domains.kanban.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 // column + card 조회 응답용 DTO
 @AllArgsConstructor

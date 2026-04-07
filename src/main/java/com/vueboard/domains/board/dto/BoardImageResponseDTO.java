@@ -1,27 +1,25 @@
 package com.vueboard.domains.board.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
+@Getter
 public class BoardImageResponseDTO {
 	private Long boardId;
-    private int status; // 0: success, 1: fail
+    private int status; // 0: fail, 1: success
 
     public static BoardImageResponseDTO success(Long boardId) {
-    	BoardImageResponseDTO dto = new BoardImageResponseDTO();
-        dto.boardId = boardId;
-        dto.status = 1;
-        return dto;
+    	return BoardImageResponseDTO.builder()
+    			.boardId(boardId)
+    			.status(1)
+    			.build();
     }
 
     public static BoardImageResponseDTO fail() {
-    	BoardImageResponseDTO dto = new BoardImageResponseDTO();
-        dto.status = 0;
-        return dto;
+    	return BoardImageResponseDTO.builder()
+    			.status(0)
+    			.build();
     }
 
 }

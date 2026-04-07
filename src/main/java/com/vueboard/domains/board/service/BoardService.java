@@ -72,8 +72,8 @@ public class BoardService {
 		}
 		// 4. 수정된 데이터 다시 조회 (정합성 보장)
 		Board updatedBoard = boardMapper.getBoardById(board.getBoardId());
-		// 5. 엔터티에서 변경된 데이터를 ResponseDTO에도 반영
-		return new BoardResponseDTO(updatedBoard);
+		// 5. 엔터티에서 변경된 데이터를 ResponseDTO에도 반영(빌더패턴 적용)
+		return BoardResponseDTO.from(updatedBoard);
 
 	}
 
@@ -94,7 +94,7 @@ public class BoardService {
 	public BoardResponseDTO updateBoardContent(Long boardId) {
 		boardMapper.updateBoardContent(boardId);
 		Board updatedBoard = boardMapper.getBoardById(boardId);
-		return new BoardResponseDTO(updatedBoard);
+		return BoardResponseDTO.from(updatedBoard);
 		
 	}
 

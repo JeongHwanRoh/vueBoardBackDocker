@@ -1,12 +1,11 @@
 package com.vueboard.domains.kanban.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+
+@Getter
+@Builder
 public class CreateCardResponseDTO {
 	private long cardId;
 	private long columnId;
