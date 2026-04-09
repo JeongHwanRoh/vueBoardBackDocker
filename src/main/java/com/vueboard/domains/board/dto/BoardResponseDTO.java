@@ -17,8 +17,6 @@ public class BoardResponseDTO {
 	private Long pn;
 	private String writer;
 	private LocalDateTime regdate;
-	private int viewcnt;
-	private String category;
 
 	public static BoardResponseDTO from(Board board) {
 		return BoardResponseDTO.builder()
@@ -28,8 +26,6 @@ public class BoardResponseDTO {
 				.pn(board.getPn())
 				.writer(board.getWriter())
 				.regdate(board.getRegdate())
-				.viewcnt(board.getViewcnt())
-				.category(board.getCategory())
 				.build();
 	}
 

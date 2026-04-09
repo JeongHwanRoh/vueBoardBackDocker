@@ -14,7 +14,5 @@ public class Board {
    private Long pn;
    private String writer;
    private LocalDateTime  regdate;
-   private int viewcnt;
-   private String category;
    
 }

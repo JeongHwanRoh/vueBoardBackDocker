@@ -14,9 +14,7 @@
 		WRITER,
 		CONTENT,
 		PN,
-		CATEGORY,
-		REGDATE,
-		VIEWCNT
+		REGDATE
 		FROM TB_BOARD
 		ORDER BY BOARD_ID DESC
 		) A
@@ -36,9 +34,7 @@
 		WRITER,
 		CONTENT,
 		PN,
-		CATEGORY,
-		REGDATE,
-		VIEWCNT
+		REGDATE
 		FROM TB_BOARD
 		ORDER BY BOARD_ID DESC
 		) A
@@ -60,9 +56,7 @@
 		WRITER,
 		CONTENT,
 		PN,
-		CATEGORY,
-		REGDATE,
-		VIEWCNT
+		REGDATE
 		FROM TB_BOARD
 		WHERE BOARD_ID = #{boardId}
 	</select>
@@ -74,11 +68,11 @@
 		INSERT INTO
 		TB_BOARD
 		(TITLE,
-		CONTENT, WRITER, PN, REGDATE, VIEWCNT)
+		CONTENT, WRITER, PN, REGDATE)
 		VALUES
 		(#{title},
 		#{content},
-		#{writer}, #{pn}, SYSDATE, 0)
+		#{writer}, #{pn}, SYSDATE)
 	</insert>
 
 	<update id="updateBoardContent"
