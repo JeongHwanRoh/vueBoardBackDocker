@@ -34,7 +34,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		log.error("🔥 JwtAuthFilter HIT: {} {}", request.getMethod(), request.getRequestURI());
+		log.info("🔥 JwtAuthFilter HIT: {} {}", request.getMethod(), request.getRequestURI());
 
 		String uri = request.getRequestURI();
 		// OPTIONS 요청은 무조건 통과
