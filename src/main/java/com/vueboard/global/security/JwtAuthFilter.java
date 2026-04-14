@@ -51,19 +51,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	        filterChain.doFilter(request, response);
 	        return;
 	    }
-	    
-		String token = CookieUtil.resolveAccessTokenFromCookie(request); // 쿠키에서 accessToken 검증
+	    try{
+			String token = CookieUtil.resolveAccessTokenFromCookie(request); // 쿠키에서 accessToken 검증
+	
+			if (token != null && jwtUtil.validateAccessToken(token)) {
+				
+				long pn = Long.parseLong(jwtUtil.extractPn(token)); // accessToken에서 pn값 꺼내기
+	
+				UserResponseDTO user = authservice.findByPn(pn); // 사용자 식별
+	
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, // principal
+						null, List.of());
+				log.info("✅ JWT 인증 성공: pn={}, uri={}", pn, uri);
+				SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContext에 인증 정보 저장
+			}
 
-		if (token != null && jwtUtil.validateAccessToken(token)) {
-
-			long pn = Long.parseLong(jwtUtil.extractPn(token)); // accessToken에서 pn값 꺼내기
-
-			UserResponseDTO user = authservice.findByPn(pn); // 사용자 식별
-
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, // principal
-					null, List.of());
-
-			SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContext에 인증 정보 저장
+		}catch(Exception e){
+			log.error("JWT 인증 중 오류 발생: {}", e.getMessage());
+			// JWT 검증 실패 시, SecurityContext에 인증 정보가 없으므로 401 Unauthorized 응답이 자동으로 처리됨
 		}
 
 		filterChain.doFilter(request, response);
