@@ -26,7 +26,6 @@ public class SecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http.cors(Customizer.withDefaults()) // 시큐리티에 WebConfig에서 설정한 CORS 설정 추가
-				.cors(Customizer.withDefaults()) // WebConfig의 설정을 시큐리티 필터에 적용
 				.csrf(csrf -> csrf.disable()) // API 서버라면 보통 비활성화
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.logout(logout -> logout.disable()) // Security 기본 LogoutFilter 비활성화 (/logout 컨토롤려 요청과 충돌 때문)

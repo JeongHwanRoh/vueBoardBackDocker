@@ -2,13 +2,9 @@ package com.vueboard.domains.auth.controller;
 
 import com.vueboard.domains.auth.dto.AuthResponseDTO;
 import com.vueboard.domains.auth.dto.UserResponseDTO;
-import com.vueboard.domains.auth.entity.User;
 import com.vueboard.domains.auth.service.AuthService;
 import com.vueboard.global.utils.CookieUtil;
-
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.Authentication;
@@ -60,8 +56,7 @@ public class AuthController {
 	@PostMapping("/logout")
 	public String logout(HttpServletResponse response) {
 		System.out.println("로그아웃 요청");
-		Cookie deleteAccessToken = cookieUtil.deleteTokenCookie("accessToken");
-		response.addCookie(deleteAccessToken);
+		cookieUtil.deleteTokenCookie(response, "accessToken");
 		return "logout success";
 	}
 }

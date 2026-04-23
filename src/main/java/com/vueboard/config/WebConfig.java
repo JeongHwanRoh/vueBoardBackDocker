@@ -24,7 +24,10 @@ public class WebConfig implements WebMvcConfigurer {
                 "http://localhost:3000",
                 "http://localhost:*",
                 "http://frontend:3000",
-                "http://192.168.2.30:3000"
+                "http://192.168.2.30:3000",
+                "https://localhost",         // HTTPS (Nginx 443)
+                "https://localhost:*",        // HTTPS wildcard (Nginx 8443 등)
+                "https://localhost:3000"
             )
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             .allowedHeaders("*")
