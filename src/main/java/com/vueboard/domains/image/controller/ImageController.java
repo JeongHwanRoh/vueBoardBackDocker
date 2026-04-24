@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/board/image")
+@RequestMapping("/api/board/image")
 public class ImageController {
 
 	private final ImageUploadService imageUploadService;

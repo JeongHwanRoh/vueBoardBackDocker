@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/kanban/card")
+@RequestMapping("/api/kanban/card")
 public class KanbanCardController {
 
 	private final KanbanCardService kanbanCardService;

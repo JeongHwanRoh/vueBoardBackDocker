@@ -48,6 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 		// JWT 검사 제외 경로
 	    if (isPublicPath(uri)) {
+			System.out.println("uri :"+uri);
 	        filterChain.doFilter(request, response);
 	        return;
 	    }
@@ -77,11 +78,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	
 	// 로그인 없이도 접근 가능한 URI들
 	private boolean isPublicPath(String uri) {
-	    return uri.startsWith("/board/image/")
-	    	|| uri.startsWith("/board/content/")
-	        || uri.startsWith("/uploads/")
-	        || uri.startsWith("/login")
-	        || uri.startsWith("/join");
+	    return uri.startsWith("/api/board/image/")
+	    	|| uri.startsWith("/api/board/content/")
+	        || uri.startsWith("/api/uploads/")
+	        || uri.startsWith("/api/login")
+	        || uri.startsWith("/api/join");
 	}
 
 }

@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("") // Vue 프록시 설정에서 이미 "/api" 지정 -> URL 경로 충돌 피하고자 빈값으로 둠
+@RequestMapping("/api") // Vue 프록시 설정에서 이미 "/api" 지정 -> URL 경로 충돌 피하고자 빈값으로 둠
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -26,11 +26,12 @@ public class AuthController {
 	 */
 	@PostMapping("/login")
 	public Map<String, Object> login(@RequestBody Map<String, String> req, HttpServletResponse response) {
+		System.out.println("로그인 메서드 정상동작");
 		String memberId = req.get("userId");
 		String password = req.get("password");
 		UserResponseDTO user = authService.login(memberId, password, response);
 		Map<String, Object> result = new HashMap<>();
-
+		System.out.println ("로그인 API 작동");
 		if (user != null) {
 			result.put("success", true);
 			result.put("user", user);

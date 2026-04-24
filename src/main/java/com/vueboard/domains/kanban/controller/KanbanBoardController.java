@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/kanban/board")
+@RequestMapping("/api/kanban/board")
 public class KanbanBoardController {
 
 	private final KanbanBoardService kanbanBoardService;
